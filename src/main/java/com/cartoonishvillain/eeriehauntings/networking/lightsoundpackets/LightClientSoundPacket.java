@@ -1,10 +1,8 @@
-package com.cartoonishvillain.eeriehauntings.networking;
+package com.cartoonishvillain.eeriehauntings.networking.lightsoundpackets;
 
 import com.cartoonishvillain.eeriehauntings.EerieHauntings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -12,17 +10,17 @@ import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class ClientSoundPacket {
+public class LightClientSoundPacket {
 
     private int ID;
     private int soundID;
 
-    public ClientSoundPacket(int id, int soundID){
+    public LightClientSoundPacket(int id, int soundID){
         this.ID = id;
         this.soundID = soundID;
     }
 
-    public ClientSoundPacket(FriendlyByteBuf packetBuffer) {
+    public LightClientSoundPacket(FriendlyByteBuf packetBuffer) {
         ID = packetBuffer.readInt();
         soundID = packetBuffer.readInt();
     }
@@ -32,8 +30,8 @@ public class ClientSoundPacket {
         buffer.writeInt(soundID);
     }
 
-    public static ClientSoundPacket decode(FriendlyByteBuf buf) {
-        return new ClientSoundPacket(buf);
+    public static LightClientSoundPacket decode(FriendlyByteBuf buf) {
+        return new LightClientSoundPacket(buf);
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier){
