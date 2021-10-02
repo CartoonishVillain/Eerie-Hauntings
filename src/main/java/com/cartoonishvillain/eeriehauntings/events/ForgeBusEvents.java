@@ -20,10 +20,15 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -118,6 +123,27 @@ public class ForgeBusEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void entityKilled(LivingDeathEvent event){
+        //The death of entities may cause a user to be haunted... Some entities are stronger willed than others.
+        LivingEntity victim = event.getEntityLiving();
+        if(!victim.level.isClientSide() && event.getSource().getDirectEntity() instanceof Player) {
+            Player aggressor = (Player) event.getSource().getDirectEntity();
+            float hauntIncrease;
+            if(victim instanceof Villager){hauntIncrease = 10f;}
+            else if(victim instanceof Player){hauntIncrease = 25f;}
+            else if(victim instanceof AbstractGolem){hauntIncrease = 7.5f;}
+            else if(victim instanceof Wolf || victim instanceof Axolotl || victim instanceof Cat || victim instanceof Parrot) {hauntIncrease = 12.5f;}
+            else {hauntIncrease = 1f;}
+
+            aggressor.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
+                h.addHauntChance(hauntIncrease);
+            });
+
+        }
+    }
+
+
 
     private static void HauntCheck(MinecraftServer server){
         List<ServerPlayer> players = server.getPlayerList().getPlayers();
@@ -133,7 +159,7 @@ public class ForgeBusEvents {
                     }
                 }
                 //reset haunt chances for all.
-                h.setHauntChance(2);
+                h.setHauntChance(1);
             });
         }
     }
