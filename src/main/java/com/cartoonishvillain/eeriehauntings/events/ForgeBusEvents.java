@@ -1,6 +1,7 @@
 package com.cartoonishvillain.eeriehauntings.events;
 
 import com.cartoonishvillain.eeriehauntings.EerieHauntings;
+import com.cartoonishvillain.eeriehauntings.Register;
 import com.cartoonishvillain.eeriehauntings.capabilities.playercapability.PlayerCapability;
 import com.cartoonishvillain.eeriehauntings.capabilities.playercapability.PlayerCapabilityManager;
 import com.cartoonishvillain.eeriehauntings.capabilities.worldcapability.WorldCapability;
@@ -11,12 +12,14 @@ import com.cartoonishvillain.eeriehauntings.networking.mediumsoundpackets.Medium
 import com.cartoonishvillain.eeriehauntings.networking.mediumsoundpackets.MediumClientSoundPacket;
 import com.cartoonishvillain.eeriehauntings.networking.strongsoundpackets.StrongClientSoundMessenger;
 import com.cartoonishvillain.eeriehauntings.networking.strongsoundpackets.StrongClientSoundPacket;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -102,7 +105,7 @@ public class ForgeBusEvents {
 
                         }
 
-                        //TODO: Night angry events
+                        //If angered, it'll lean towards stronger events.
                         else {
                             int chance = event.player.getRandom().nextInt(10);
                             if (chance <= 2) {
@@ -118,6 +121,18 @@ public class ForgeBusEvents {
                         }
                     }
                     h.setHauntActionTicks(event.player.getRandom().nextInt(750 - 400) + 400);
+
+                    if(event.player.getMainHandItem().getItem().equals(Register.OLDRADIO.get()) && h.getGhostType() != 1 && h.getGhostType() != 0){
+                        event.player.getCooldowns().addCooldown(Register.OLDRADIO.get(), 100);
+                        event.player.level.playSound(null, event.player.getOnPos(), Register.RADIOSOUND.get(), SoundSource.MASTER, 1, 1);
+                        event.player.displayClientMessage(new TranslatableComponent("item.eeriehauntings.radio").withStyle(ChatFormatting.GOLD), true);
+                    }
+                    else if(event.player.getMainHandItem().getItem().equals(Register.EMFCOUNTER.get()) && h.getGhostType() != 2 && h.getGhostType() != 0){
+                        event.player.getCooldowns().addCooldown(Register.EMFCOUNTER.get(), 100);
+                        event.player.level.playSound(null, event.player.getOnPos(), Register.EMFCOUNTERSOUNDS.get(), SoundSource.MASTER, 1, 1);
+                        event.player.displayClientMessage(new TranslatableComponent("item.eeriehauntings.emf").withStyle(ChatFormatting.GOLD), true);
+                    }
+
                 }
             });
         }
@@ -139,7 +154,6 @@ public class ForgeBusEvents {
             aggressor.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
                 h.addHauntChance(hauntIncrease);
             });
-
         }
     }
 
@@ -183,15 +197,15 @@ public class ForgeBusEvents {
         switch (random){
             case 0 -> {
                 player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 350, 0));
-                player.displayClientMessage(new TranslatableComponent("ghost.moderateslow.alert"), false);
+//                player.displayClientMessage(new TranslatableComponent("ghost.moderateslow.alert"), false);
             }
             case 1 -> {
                 player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 350, 0));
-                player.displayClientMessage(new TranslatableComponent("ghost.moderateblind.alert"), false);
+//                player.displayClientMessage(new TranslatableComponent("ghost.moderateblind.alert"), false);
             }
             case 2 -> {
                 player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 350, 0));
-                player.displayClientMessage(new TranslatableComponent("ghost.moderateweakness.alert"), false);
+//                player.displayClientMessage(new TranslatableComponent("ghost.moderateweakness.alert"), false);
             }
         }
         MediumClientSoundMessenger.sendTo(new MediumClientSoundPacket(player.getId()), player);
@@ -202,15 +216,15 @@ public class ForgeBusEvents {
         switch (random){
             case 0 ->{
                 player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 200, 0));
-                player.displayClientMessage(new TranslatableComponent("ghost.stronglevitate.alert"), false);
+//                player.displayClientMessage(new TranslatableComponent("ghost.stronglevitate.alert"), false);
             }
             case 1 ->{
                 player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
-                player.displayClientMessage(new TranslatableComponent("ghost.strongconfusion.alert"), false);
+//                player.displayClientMessage(new TranslatableComponent("ghost.strongconfusion.alert"), false);
             }
             case 2 ->{
                 player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 200, 0));
-                player.displayClientMessage(new TranslatableComponent("ghost.stronghunger.alert"), false);
+//                player.displayClientMessage(new TranslatableComponent("ghost.stronghunger.alert"), false);
             }
         }
         StrongClientSoundMessenger.sendTo(new StrongClientSoundPacket(player.getId()), player);

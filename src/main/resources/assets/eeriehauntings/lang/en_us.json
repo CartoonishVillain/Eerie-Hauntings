@@ -1,0 +1,15 @@
+{
+  "item.eeriehauntings.emf_counter": "EMF Counter",
+  "item.eeriehauntings.old_radio": "Old Radio",
+  "item.eeriehauntings.emf": "Your EMF Counter goes off after a ghastly event...",
+  "item.eeriehauntings.radio": "Your Radio starts frantically going off after a ghastly event...",
+  "item.eeriehauntings.emfdesc": "Sniffs through nearby electromagnetic fields and sounds off in the event of an anomaly.",
+  "item.eeriehauntings.click": "Use to demo the sound.",
+  "item.eeriehauntings.radiodesc": "Tunes into high frequencies and reads ghost vocalizations as morse code.",
+  "ghost.moderateslow.alert": "The air around you rapidly gets colder.",
+  "ghost.moderateblind.alert": "The light around you drains into a seemingly endless void.",
+  "ghost.moderateweakness.alert": "Something pushes against your attacks.",
+  "ghost.stronglevitate.alert": "The air around you gets lighter and lighter.",
+  "ghost.strongconfusion.alert": "Your surroundings start to spin around you.",
+  "ghost.stronghunger.alert": "You begin to feel sick to your stomach."
+}

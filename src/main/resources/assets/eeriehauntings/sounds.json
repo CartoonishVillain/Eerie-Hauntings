@@ -1,4 +1,6 @@
 {
   "medium_sounds": { "sounds": ["eeriehauntings:mediumgroan", "eeriehauntings:mediumlaugh"]},
-  "strong_sounds": { "sounds": ["eeriehauntings:stronggroan", "eeriehauntings:stronglaugh", "eeriehauntings:strongslaugh"]}
+  "strong_sounds": { "sounds": ["eeriehauntings:stronggroan", "eeriehauntings:stronglaugh", "eeriehauntings:strongslaugh"]},
+  "emfcounter": { "sounds": ["eeriehauntings:emfcounter"]},
+  "radio": { "sounds": ["eeriehauntings:radio1", "eeriehauntings:radio2", "eeriehauntings:radio3", "eeriehauntings:radio4"]}
 }
