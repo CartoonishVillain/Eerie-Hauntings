@@ -1,3 +1,4 @@
 {
-  "medium_sounds": { "sounds": ["eeriehauntings:mediumgroan", "eeriehauntings:mediumlaugh"]}
+  "medium_sounds": { "sounds": ["eeriehauntings:mediumgroan", "eeriehauntings:mediumlaugh"]},
+  "strong_sounds": { "sounds": ["eeriehauntings:stronggroan", "eeriehauntings:stronglaugh", "eeriehauntings:strongslaugh"]}
 }

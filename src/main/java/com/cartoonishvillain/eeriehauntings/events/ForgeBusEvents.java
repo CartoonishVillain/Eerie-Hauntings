@@ -9,6 +9,8 @@ import com.cartoonishvillain.eeriehauntings.networking.lightsoundpackets.LightCl
 import com.cartoonishvillain.eeriehauntings.networking.lightsoundpackets.LightClientSoundPacket;
 import com.cartoonishvillain.eeriehauntings.networking.mediumsoundpackets.MediumClientSoundMessenger;
 import com.cartoonishvillain.eeriehauntings.networking.mediumsoundpackets.MediumClientSoundPacket;
+import com.cartoonishvillain.eeriehauntings.networking.strongsoundpackets.StrongClientSoundMessenger;
+import com.cartoonishvillain.eeriehauntings.networking.strongsoundpackets.StrongClientSoundPacket;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -82,23 +84,20 @@ public class ForgeBusEvents {
                         lightEffect((ServerPlayer) event.player);
 
                     } else {
-                        //TODO: Night events
                         if(!h.getAnger()){
                             int chance = event.player.getRandom().nextInt(10);
                             if(chance <= 5){
                                 lightEffect((ServerPlayer) event.player);
                             }
                             else if(chance <= 7){
-                                //TODO: Moderate Effects.
                                 moderateEffect((ServerPlayer) event.player);
                             }
                             else if(chance <= 8){
-                                //TODO: Moderate + Light
                                 lightEffect((ServerPlayer) event.player);
                                 moderateEffect((ServerPlayer) event.player);
                             }
                             else {
-                                //TODO: Strong Effect.
+                                strongEffect((ServerPlayer) event.player);
                             }
 
                         }
@@ -161,6 +160,25 @@ public class ForgeBusEvents {
             }
         }
         MediumClientSoundMessenger.sendTo(new MediumClientSoundPacket(player.getId()), player);
+    }
+
+    private static void strongEffect(ServerPlayer player){
+        int random = player.getRandom().nextInt(3);
+        switch (random){
+            case 0 ->{
+                player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 200, 0));
+                player.displayClientMessage(new TranslatableComponent("ghost.stronglevitate.alert"), false);
+            }
+            case 1 ->{
+                player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
+                player.displayClientMessage(new TranslatableComponent("ghost.strongconfusion.alert"), false);
+            }
+            case 2 ->{
+                player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 200, 0));
+                player.displayClientMessage(new TranslatableComponent("ghost.stronghunger.alert"), false);
+            }
+        }
+        StrongClientSoundMessenger.sendTo(new StrongClientSoundPacket(player.getId()), player);
     }
 
     private static void broadcast(MinecraftServer server, Component translationTextComponent){

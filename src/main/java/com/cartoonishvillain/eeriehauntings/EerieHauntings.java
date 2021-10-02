@@ -2,6 +2,7 @@ package com.cartoonishvillain.eeriehauntings;
 
 import com.cartoonishvillain.eeriehauntings.networking.lightsoundpackets.LightClientSoundMessenger;
 import com.cartoonishvillain.eeriehauntings.networking.mediumsoundpackets.MediumClientSoundMessenger;
+import com.cartoonishvillain.eeriehauntings.networking.strongsoundpackets.StrongClientSoundMessenger;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,6 +27,7 @@ public class EerieHauntings
     public EerieHauntings() {
         LightClientSoundMessenger.register();
         MediumClientSoundMessenger.register();
+        StrongClientSoundMessenger.register();
         Register.init();
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
