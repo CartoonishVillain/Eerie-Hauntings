@@ -72,38 +72,47 @@ public class ForgeBusEvents {
     }
 
     @SubscribeEvent
-    public static void playerGhostEvent(TickEvent.PlayerTickEvent event){
-        float tickcount = event.player.tickCount % 600;
-        //event.player.displayClientMessage(new TextComponent(Float.toString(tickcount)), true);
-        if(!event.player.level.isClientSide() && event.player.tickCount % 600 == 0){
-            //TODO: This is kinda hacky and not great. But it is how I can stop double ticking of events. Find another way eventually.
-            event.player.tickCount++;
-            event.player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
-                if(h.getIsHaunted()) {
+    public static void playerGhostEvent(TickEvent.PlayerTickEvent event) {
+
+        if (!event.player.level.isClientSide() && event.phase.equals(TickEvent.Phase.END)) {
+            event.player.getCapability(PlayerCapability.INSTANCE).ifPresent(h -> {
+                if (h.checkHauntActionTicks())
+                if (h.getIsHaunted() && h.checkHauntActionTicks()) {
                     if (event.player.level.isDay()) {
                         lightEffect((ServerPlayer) event.player);
 
                     } else {
-                        if(!h.getAnger()){
+                        if (!h.getAnger()) {
                             int chance = event.player.getRandom().nextInt(10);
-                            if(chance <= 5){
+                            if (chance <= 5) {
                                 lightEffect((ServerPlayer) event.player);
-                            }
-                            else if(chance <= 7){
+                            } else if (chance <= 7) {
                                 moderateEffect((ServerPlayer) event.player);
-                            }
-                            else if(chance <= 8){
+                            } else if (chance <= 8) {
                                 lightEffect((ServerPlayer) event.player);
                                 moderateEffect((ServerPlayer) event.player);
-                            }
-                            else {
+                            } else {
                                 strongEffect((ServerPlayer) event.player);
                             }
 
                         }
 
                         //TODO: Night angry events
+                        else {
+                            int chance = event.player.getRandom().nextInt(10);
+                            if (chance <= 2) {
+                                lightEffect((ServerPlayer) event.player);
+                            } else if (chance <= 5) {
+                                moderateEffect((ServerPlayer) event.player);
+                            } else if (chance <= 7) {
+                                lightEffect((ServerPlayer) event.player);
+                                moderateEffect((ServerPlayer) event.player);
+                            } else {
+                                strongEffect((ServerPlayer) event.player);
+                            }
+                        }
                     }
+                    h.setHauntActionTicks(event.player.getRandom().nextInt(750 - 400) + 400);
                 }
             });
         }

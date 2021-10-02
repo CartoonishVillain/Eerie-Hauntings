@@ -1,9 +1,9 @@
 package com.cartoonishvillain.eeriehauntings.capabilities.playercapability;
 
 public interface IPlayerCapability {
-    int getHauntChance();
-    void setHauntChance(int hauntChance);
-    void addHauntChance(int addedChance);
+    float getHauntChance();
+    void setHauntChance(float hauntChance);
+    void addHauntChance(float addedChance);
     boolean getIsHaunted();
     void setHaunted(boolean isHaunted);
     int getGhostType();
@@ -12,4 +12,7 @@ public interface IPlayerCapability {
     void setProtectedDays(int days);
     void setAnger(boolean isAngry);
     boolean getAnger();
+    int getHauntActionTicks();
+    void setHauntActionTicks(int ticks);
+    boolean checkHauntActionTicks();
 }
