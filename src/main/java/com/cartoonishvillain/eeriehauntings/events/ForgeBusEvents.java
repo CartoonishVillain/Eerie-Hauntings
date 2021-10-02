@@ -23,11 +23,14 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
@@ -46,8 +49,9 @@ public class ForgeBusEvents {
 
     @SubscribeEvent
     public static void worldRegister(AttachCapabilitiesEvent<Level> event){
+        if(event.getObject().dimension().toString().contains("overworld")){
         WorldCapabilityManager provider = new WorldCapabilityManager();
-        event.addCapability(new ResourceLocation(EerieHauntings.MODID, "worldtimer"), provider);
+        event.addCapability(new ResourceLocation(EerieHauntings.MODID, "worldtimer"), provider);}
     }
 
     @SubscribeEvent
@@ -228,6 +232,26 @@ public class ForgeBusEvents {
             }
         }
         StrongClientSoundMessenger.sendTo(new StrongClientSoundPacket(player.getId()), player);
+    }
+
+    //Ghost removal w/o making the ghost angry (or letting it calm down first)
+    public static void exorciseGhost(ServerPlayer player){
+        player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
+            h.setHaunted(false);
+            h.setGhostType(0);
+            ItemEntity item = new ItemEntity(EntityType.ITEM, player.level);
+            item.setItem(new ItemStack(Register.UNEARTHLYSHARD.get()));
+            item.setPos(player.getX(), player.getY(), player.getZ());
+            player.level.addFreshEntity(item);
+        });
+    }
+
+    //Ghost removal while angry. Doesn't drop an unearthlyShard
+    public static void expellGhost(ServerPlayer player){
+        player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
+            h.setHaunted(false);
+            h.setGhostType(0);
+        });
     }
 
     private static void broadcast(MinecraftServer server, Component translationTextComponent){

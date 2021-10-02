@@ -1,7 +1,6 @@
 package com.cartoonishvillain.eeriehauntings;
 
-import com.cartoonishvillain.eeriehauntings.items.EMFCounter;
-import com.cartoonishvillain.eeriehauntings.items.Radio;
+import com.cartoonishvillain.eeriehauntings.items.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.CreativeModeTab;
@@ -28,6 +27,11 @@ public class Register {
 
     public static final RegistryObject<Item> EMFCOUNTER = ITEMS.register("emf_counter", () -> new EMFCounter(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
     public static final RegistryObject<Item> OLDRADIO = ITEMS.register("old_radio", () -> new Radio(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
+    public static final RegistryObject<Item> UNEARTHLYSHARD = ITEMS.register("unearthly_shard", () -> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS)));
+    public static final RegistryObject<Item> UNEARTHLYGEM = ITEMS.register("unearthly_gem", () -> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS)));
+    public static final RegistryObject<Item> INCENSESTICK = ITEMS.register("incense_stick", () -> new IncenseStick(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
+    public static final RegistryObject<Item> PURIFIEDWATER = ITEMS.register("purified_water", () -> new PurifiedWater(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
+    public static final RegistryObject<Item> REDSTONEDREAMCATCHER = ITEMS.register("redstone_dream_catcher", () -> new RedstoneDreamCatcher(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
 
 
 }

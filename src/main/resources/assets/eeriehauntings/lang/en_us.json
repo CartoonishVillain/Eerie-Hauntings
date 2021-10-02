@@ -11,5 +11,8 @@
   "ghost.moderateweakness.alert": "Something pushes against your attacks.",
   "ghost.stronglevitate.alert": "The air around you gets lighter and lighter.",
   "ghost.strongconfusion.alert": "Your surroundings start to spin around you.",
-  "ghost.stronghunger.alert": "You begin to feel sick to your stomach."
+  "ghost.stronghunger.alert": "You begin to feel sick to your stomach.",
+  "tools.eeriehauntings.water": "Throw at your feet to expel your local angry spirit! Effective against spirits who ONLY cause radio disturbances",
+  "tools.eeriehauntings.redstone": "Activate this pocket machine to trap your local angry spirit! Effective against spirits who ONLY cause EMF disturbances",
+  "tools.eeriehauntings.incense": "Burn in your main hand with a flint and steel to expel your local angry spirit! Effective against spirits who cause BOTH radio and EMF disturbances"
 }
