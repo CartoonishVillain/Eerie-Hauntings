@@ -176,6 +176,7 @@ public class ForgeBusEvents {
                         h.setGhostType(player.getRandom().nextInt(3)+1);
                     }
                 }
+                if(h.getProtectedDays() > 0){h.setProtectedDays(h.getProtectedDays() - 1);}
                 //reset haunt chances for all.
                 h.setHauntChance(1);
             });
@@ -251,6 +252,41 @@ public class ForgeBusEvents {
         player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
             h.setHaunted(false);
             h.setGhostType(0);
+        });
+    }
+
+    //Ghost removal with an offering. Doesn't drop an unearthlyShard. Buffs the player.
+    public static void boonExpelGhost(ServerPlayer player){
+        player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
+            h.setHaunted(false);
+            h.setGhostType(0);
+            int rand = player.getRandom().nextInt(6);
+            switch (rand){
+                case 0 ->{
+                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 72000, 0));
+                    player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.speed").withStyle(ChatFormatting.AQUA), false);
+                }
+                case 1 ->{
+                    player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 72000, 0));
+                    player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.haste").withStyle(ChatFormatting.YELLOW), false);
+                }
+                case 2 ->{
+                    player.addEffect(new MobEffectInstance(MobEffects.JUMP, 72000, 0));
+                    player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.jump").withStyle(ChatFormatting.GREEN), false);
+                }
+                case 3 ->{
+                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 72000, 0));
+                    player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.resistance").withStyle(ChatFormatting.RED), false);
+                }
+                case 4 ->{
+                    player.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 72000, 1));
+                    player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.life").withStyle(ChatFormatting.LIGHT_PURPLE), false);
+                }
+                case 5 ->{
+                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 72000, 0));
+                    player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.strength").withStyle(ChatFormatting.DARK_RED), false);
+                }
+            }
         });
     }
 

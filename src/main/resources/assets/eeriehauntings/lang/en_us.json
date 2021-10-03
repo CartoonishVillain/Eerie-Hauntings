@@ -14,5 +14,7 @@
   "ghost.stronghunger.alert": "You begin to feel sick to your stomach.",
   "tools.eeriehauntings.water": "Throw at your feet to expel your local angry spirit! Effective against spirits who ONLY cause radio disturbances",
   "tools.eeriehauntings.redstone": "Activate this pocket machine to trap your local angry spirit! Effective against spirits who ONLY cause EMF disturbances",
-  "tools.eeriehauntings.incense": "Burn in your main hand with a flint and steel to expel your local angry spirit! Effective against spirits who cause BOTH radio and EMF disturbances"
+  "tools.eeriehauntings.incense": "Burn in your main hand with a flint and steel to expel your local angry spirit! Effective against spirits who cause BOTH radio and EMF disturbances",
+  "info.eeriehauntings.activatechalk": "You draw a chalk circle around you, and feel relief. For the next 10 days you are free from the curses of angry spirits.",
+  "info.eeriehauntings.failactivatechalk": "You attempt to draw a chalk circle around yourself, but are stopped by the spirit haunting you.."
 }
