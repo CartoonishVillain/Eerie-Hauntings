@@ -10,9 +10,12 @@ import com.cartoonishvillain.eeriehauntings.networking.lightsoundpackets.LightCl
 import com.cartoonishvillain.eeriehauntings.networking.lightsoundpackets.LightClientSoundPacket;
 import com.cartoonishvillain.eeriehauntings.networking.mediumsoundpackets.MediumClientSoundMessenger;
 import com.cartoonishvillain.eeriehauntings.networking.mediumsoundpackets.MediumClientSoundPacket;
+import com.cartoonishvillain.eeriehauntings.networking.shaderupdatepacket.ShaderUpdateMessenger;
+import com.cartoonishvillain.eeriehauntings.networking.shaderupdatepacket.ShaderUpdatePacket;
 import com.cartoonishvillain.eeriehauntings.networking.strongsoundpackets.StrongClientSoundMessenger;
 import com.cartoonishvillain.eeriehauntings.networking.strongsoundpackets.StrongClientSoundPacket;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -34,6 +37,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -80,6 +84,22 @@ public class ForgeBusEvents {
                 }
             });
 
+        }
+    }
+
+    @SubscribeEvent
+    public static void playerEffectTick(TickEvent.PlayerTickEvent event) {
+        if(event.phase.equals(TickEvent.Phase.END)){
+            event.player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
+                if(h.getVisualEffectTime() > 0){
+                    h.setVisualEffectTime(h.getVisualEffectTime() - 1);
+                    if(h.getVisualEffectTime() == 0 && event.player.level.isClientSide()) {
+                        //if the ticker reaches 0, remove the effect.
+                        Minecraft.getInstance().gameRenderer.shutdownEffect();
+                        h.setEffectID(0);
+                    }
+                }
+            });
         }
     }
 
@@ -161,6 +181,17 @@ public class ForgeBusEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void playerJoinEvent(EntityJoinWorldEvent event){
+        if(!event.getWorld().isClientSide() && event.getEntity() instanceof Player){
+            event.getEntity().getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
+                if(h.getVisualEffectTime() > 0){
+                    ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(event.getEntity().getId(), h.getVisualEffectTime(), h.getEffectID()), (Player) event.getEntity());
+                }
+            });
+        }
+    }
+
 
 
     private static void HauntCheck(MinecraftServer server){
@@ -192,6 +223,7 @@ public class ForgeBusEvents {
     }
     }
 
+
     private static void lightEffect(ServerPlayer player){
         int soundID = player.getRandom().nextInt(EerieHauntings.lowEndSounds.size());
         LightClientSoundMessenger.sendTo(new LightClientSoundPacket(player.getId(), soundID), player);
@@ -221,6 +253,11 @@ public class ForgeBusEvents {
         switch (random){
             case 0 ->{
                 player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 200, 0));
+                player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
+                    h.setEffectID(1);
+                    h.setVisualEffectTime(200);
+                    ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(player.getId(), 200, 1), player);
+                });
 //                player.displayClientMessage(new TranslatableComponent("ghost.stronglevitate.alert"), false);
             }
             case 1 ->{

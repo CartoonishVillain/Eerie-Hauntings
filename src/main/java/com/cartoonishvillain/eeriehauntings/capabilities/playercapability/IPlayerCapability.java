@@ -15,4 +15,8 @@ public interface IPlayerCapability {
     int getHauntActionTicks();
     void setHauntActionTicks(int ticks);
     boolean checkHauntActionTicks();
+    int getVisualEffectTime();
+    void setVisualEffectTime(int ticks);
+    int getEffectID();
+    void setEffectID(int ID);
 }

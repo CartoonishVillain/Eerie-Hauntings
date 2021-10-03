@@ -19,6 +19,8 @@ public class PlayerCapabilityManager implements IPlayerCapability, ICapabilityPr
     protected int ghostType = 0;
     protected int protectedDays = 0;
     protected int hauntTicks = 0;
+    protected int effectTicks = 0;
+    protected int effectID = 0;
     @Override
     public float getHauntChance() {
         return hauntChance;
@@ -91,6 +93,26 @@ public class PlayerCapabilityManager implements IPlayerCapability, ICapabilityPr
         return hauntTicks <= 0;
     }
 
+    @Override
+    public int getVisualEffectTime() {
+        return effectTicks;
+    }
+
+    @Override
+    public void setVisualEffectTime(int ticks) {
+        effectTicks = ticks;
+    }
+
+    @Override
+    public int getEffectID() {
+        return effectID;
+    }
+
+    @Override
+    public void setEffectID(int ID) {
+        effectID = ID;
+    }
+
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
@@ -107,6 +129,8 @@ public class PlayerCapabilityManager implements IPlayerCapability, ICapabilityPr
         tag.putInt("ghosttype", ghostType);
         tag.putInt("protecteddays", protectedDays);
         tag.putInt("hauntactivitytime", hauntTicks);
+        tag.putInt("effectticks", effectTicks);
+        tag.putInt("effectid", effectID);
         return tag;
     }
 
@@ -118,5 +142,7 @@ public class PlayerCapabilityManager implements IPlayerCapability, ICapabilityPr
         ghostType = nbt.getInt("ghosttype");
         protectedDays = nbt.getInt("protecteddays");
         hauntTicks = nbt.getInt("hauntactivitytime");
+        effectTicks = nbt.getInt("effectticks");
+        effectID = nbt.getInt("effectid");
     }
 }
