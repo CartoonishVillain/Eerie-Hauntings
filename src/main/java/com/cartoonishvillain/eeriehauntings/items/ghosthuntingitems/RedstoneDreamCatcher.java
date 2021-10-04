@@ -1,5 +1,6 @@
 package com.cartoonishvillain.eeriehauntings.items.ghosthuntingitems;
 
+import com.cartoonishvillain.eeriehauntings.EerieHauntings;
 import com.cartoonishvillain.eeriehauntings.capabilities.playercapability.PlayerCapability;
 import com.cartoonishvillain.eeriehauntings.events.ForgeBusEvents;
 import net.minecraft.ChatFormatting;
@@ -36,13 +37,17 @@ public class RedstoneDreamCatcher extends Item {
             p_41433_.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
                 int type = h.getGhostType();
                 if(h.getIsHaunted()){
-                    if(type == 1){
-                        if(h.getAnger()) ForgeBusEvents.expellGhost((ServerPlayer) p_41433_);
-                        else ForgeBusEvents.exorciseGhost((ServerPlayer) p_41433_);
-                    }
-                    else{
-                        h.setAnger(true);
-                        h.setHauntActionTicks(1);
+                    if(!EerieHauntings.serverConfig.EASYMODE.get()) {
+                        if (type == 1) {
+                            if (h.getAnger()) ForgeBusEvents.expellGhost((ServerPlayer) p_41433_);
+                            else ForgeBusEvents.exorciseGhost((ServerPlayer) p_41433_);
+                        } else {
+                            if(EerieHauntings.serverConfig.ANGERGHOST.get())
+                                h.setAnger(true);
+                            h.setHauntActionTicks(1);
+                        }
+                    } else{
+                        ForgeBusEvents.exorciseGhost((ServerPlayer) p_41433_);
                     }
                 }
             });
@@ -52,7 +57,10 @@ public class RedstoneDreamCatcher extends Item {
 
     @Override
     public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> p_41423_, TooltipFlag p_41424_) {
+        if(!EerieHauntings.serverConfig.EASYMODE.get())
         p_41423_.add(new TranslatableComponent("tools.eeriehauntings.redstone").withStyle(ChatFormatting.GOLD));
+        else
+            p_41423_.add(new TranslatableComponent("tools.eeriehauntings.easyredstone").withStyle(ChatFormatting.GOLD));
         super.appendHoverText(p_41421_, p_41422_, p_41423_, p_41424_);
     }
 }

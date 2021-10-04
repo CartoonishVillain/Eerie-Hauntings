@@ -1,5 +1,6 @@
 package com.cartoonishvillain.eeriehauntings.items;
 
+import com.cartoonishvillain.eeriehauntings.EerieHauntings;
 import com.cartoonishvillain.eeriehauntings.capabilities.playercapability.PlayerCapability;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -25,8 +26,8 @@ public class CalciteChalk extends Item {
         if(!p_41432_.isClientSide()) {
             p_41433_.getCapability(PlayerCapability.INSTANCE).ifPresent(h -> {
                 if (!h.getIsHaunted()) {
-                    h.setProtectedDays(10);
-                    p_41433_.displayClientMessage(new TranslatableComponent("info.eeriehauntings.activatechalk"), false);
+                    h.setProtectedDays(EerieHauntings.serverConfig.CHALKDURATION.get());
+                    p_41433_.displayClientMessage(new TranslatableComponent("info.eeriehauntings.activatechalk", EerieHauntings.serverConfig.CHALKDURATION.get()), false);
                     p_41433_.getCooldowns().addCooldown(this, 100);
                     p_41433_.getItemInHand(p_41434_).shrink(1);
                 } else {
@@ -41,6 +42,6 @@ public class CalciteChalk extends Item {
     @Override
     public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> p_41423_, TooltipFlag p_41424_) {
         super.appendHoverText(p_41421_, p_41422_, p_41423_, p_41424_);
-        p_41423_.add(new TranslatableComponent("info.eeriehauntings.calciteexplain").withStyle(ChatFormatting.GOLD));
+        p_41423_.add(new TranslatableComponent("info.eeriehauntings.calciteexplain", EerieHauntings.serverConfig.CHALKDURATION.get()).withStyle(ChatFormatting.GOLD));
     }
 }

@@ -13,9 +13,12 @@
   "ghost.strongconfusion.alert": "Your surroundings start to spin around you.",
   "ghost.stronghunger.alert": "You begin to feel sick to your stomach.",
   "tools.eeriehauntings.water": "Throw at your feet to expel your local angry spirit! Effective against spirits who ONLY cause radio disturbances",
+  "tools.eeriehauntings.easywater": "Throw at your feet to expel your local angry spirit!",
   "tools.eeriehauntings.redstone": "Activate this pocket machine to trap your local angry spirit! Effective against spirits who ONLY cause EMF disturbances",
+  "tools.eeriehauntings.easyredstone": "Activate this pocket machine to trap your local angry spirit!",
   "tools.eeriehauntings.incense": "Burn in your main hand with a flint and steel to expel your local angry spirit! Effective against spirits who cause BOTH radio and EMF disturbances",
-  "info.eeriehauntings.activatechalk": "You draw a chalk circle around you, and feel relief. For the next 10 days you are free from the curses of angry spirits.",
+  "tools.eeriehauntings.easyincense": "Burn in your main hand with a flint and steel to expel your local angry spirit!",
+  "info.eeriehauntings.activatechalk": "You draw a chalk circle around you, and feel relief. For the next %1$s day(s) you are free from the curses of angry spirits.",
   "info.eeriehauntings.failactivatechalk": "You attempt to draw a chalk circle around yourself, but are stopped by the spirit haunting you..",
   "item.eeriehauntings.incense_stick": "Incense Stick",
   "item.eeriehauntings.purified_water": "Purified Water",
@@ -25,7 +28,7 @@
   "item.eeriehauntings.unearthly_shard": "Unearthly Shard",
   "item.eeriehauntings.unearthly_gem": "Unearthly Gem",
   "item.eeriehauntings.unearthly_dagger": "Unearthly Dagger",
-  "info.eeriehauntings.calciteexplain": "Powered with ghostly energy, protects the user from hauntings for 10 days if they are not already haunted.",
+  "info.eeriehauntings.calciteexplain": "Powered with ghostly energy, protects the user from hauntings for %1$s day(s) if they are not already haunted.",
   "info.eeriehauntings.offering": "Burn this offering in your main hand with a flint and steel to dispel a non-angry spirit instantly, and receive a boon from them.",
   "info.eeriehauntings.shard": "A small, somewhat physical manifestation of a spirit's power. It can be molded into more powerful forms and items.",
   "info.eeriehauntings.shardgain": "Obtained when you exorcise a spirit while it isn't angered.",
@@ -36,5 +39,7 @@
   "boon.eeriehauntings.jump": "As the offering burns, the spirit leaves you with the boon of jumping",
   "boon.eeriehauntings.resistance": "As the offering burns, the spirit leaves you with the boon of resistance",
   "boon.eeriehauntings.life": "As the offering burns, the spirit leaves you with the boon of life",
-  "boon.eeriehauntings.strength":"As the offering burns, the spirit leaves you with the boon of strength"
+  "boon.eeriehauntings.strength":"As the offering burns, the spirit leaves you with the boon of strength",
+  "boon.eeriehauntings.disabled": "As the offering burns, the spirit attempts to leave you with a boon, but is too weak to do so.",
+  "info.eeriehauntings.offeringdisabled": "Burn this offering in your main hand with a flint and steel to dispel a non-angry spirit instantly, the boons they would normally give you however are disabled."
 }

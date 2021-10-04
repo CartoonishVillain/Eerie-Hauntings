@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ServerConfig {
 
     public static final String CATEGORY_HAUNTS = "Haunting Settings";
+    public static final String CATEGORY_MECHANICS = "Haunting Mechanics";
 
     public ConfigHelper.ConfigValueListener<Double> NORMALHAUNTCHANCE;
     public ConfigHelper.ConfigValueListener<Double> VILLAGERHAUNTCHANCE;
@@ -19,6 +20,11 @@ public class ServerConfig {
     public ConfigHelper.ConfigValueListener<Integer> MINIMUMEFFECTWAIT;
     public ConfigHelper.ConfigValueListener<Integer> MAXIMUMEFFECTWAIT;
     public ConfigHelper.ConfigValueListener<Integer> BOONSTRENGTH;
+
+    public ConfigHelper.ConfigValueListener<Boolean> EASYMODE;
+    public ConfigHelper.ConfigValueListener<Integer> CHALKDURATION;
+    public ConfigHelper.ConfigValueListener<Boolean> ANGERGHOST;
+    public ConfigHelper.ConfigValueListener<Boolean> BOON;
 
 
     public ServerConfig(ForgeConfigSpec.Builder builder, ConfigHelper.Subscriber subscriber){
@@ -34,6 +40,14 @@ public class ServerConfig {
         this.MINIMUMEFFECTWAIT = subscriber.subscribe(builder.comment("The minimum wait time between ghost events in ticks").defineInRange("minimumEventWait", 400, 100, Integer.MAX_VALUE));
         this.MAXIMUMEFFECTWAIT = subscriber.subscribe(builder.comment("The maximum wait time between ghost events in ticks").defineInRange("maximumEventWait", 700, 100, Integer.MAX_VALUE));
         this.BOONSTRENGTH = subscriber.subscribe(builder.comment("Increase the potency of boons additively").defineInRange("boonstrength", 0, 0, 100));
+        builder.pop();
+
+        builder.comment("Modify ghost mechanics and the numbers behind the scenes").push(CATEGORY_MECHANICS);
+        this.EASYMODE = subscriber.subscribe(builder.comment("Disables needing specific exorcism types to exorcise the ghost. Also automatically means the anger mechanic is disabled").define("easyMode", false));
+        this.ANGERGHOST = subscriber.subscribe(builder.comment("Enables or Disables ghosts getting angry when the wrong exorcism type is used, ramping up more harsh effects until the next day.").define("anger", true));
+        this.BOON = subscriber.subscribe(builder.comment("Enables or disables boons, a system where a ghost can provide a buff for an hour when an offering is burnt.").define("boon", true));
+        this.CHALKDURATION = subscriber.subscribe(builder.comment("How many ingame days are players safe after they successfully use chalk.").defineInRange("chalkDuration", 10, 1, 60));
+        builder.pop();
     }
 
 
