@@ -39,6 +39,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -197,6 +198,14 @@ public class ForgeBusEvents {
                     ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(event.getEntity().getId(), h.getVisualEffectTime(), h.getEffectID()), (Player) event.getEntity());
                 }
             });
+        }
+    }
+
+    @SubscribeEvent
+    public static void ItemToolTips(ItemTooltipEvent event){
+        if(event.getItemStack().getItem().equals(Register.UNEARTHLYSHARD.get())){
+            event.getToolTip().add(new TranslatableComponent("info.eeriehauntings.shard").withStyle(ChatFormatting.GOLD));
+            event.getToolTip().add(new TranslatableComponent("info.eeriehauntings.shardgain").withStyle(ChatFormatting.RED));
         }
     }
 

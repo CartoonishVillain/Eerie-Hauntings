@@ -2,6 +2,7 @@ package com.cartoonishvillain.eeriehauntings;
 
 import com.cartoonishvillain.eeriehauntings.items.CalciteChalk;
 import com.cartoonishvillain.eeriehauntings.items.Materials;
+import com.cartoonishvillain.eeriehauntings.items.Offering;
 import com.cartoonishvillain.eeriehauntings.items.UnearthlyDagger;
 import com.cartoonishvillain.eeriehauntings.items.ghosthuntingitems.*;
 import net.minecraft.resources.ResourceLocation;
