@@ -28,6 +28,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -148,7 +149,7 @@ public class ForgeBusEvents {
                             }
                         }
                     }
-                    h.setHauntActionTicks(event.player.getRandom().nextInt(750 - 400) + 400);
+                    h.setHauntActionTicks(event.player.getRandom().nextInt(EerieHauntings.serverConfig.MAXIMUMEFFECTWAIT.get() - EerieHauntings.serverConfig.MINIMUMEFFECTWAIT.get()) + EerieHauntings.serverConfig.MINIMUMEFFECTWAIT.get());
 
                     if(event.player.getMainHandItem().getItem().equals(Register.OLDRADIO.get()) && h.getGhostType() != 1 && h.getGhostType() != 0){
                         event.player.getCooldowns().addCooldown(Register.OLDRADIO.get(), 100);
@@ -174,11 +175,11 @@ public class ForgeBusEvents {
         if(!victim.level.isClientSide() && event.getSource().getDirectEntity() instanceof Player) {
             Player aggressor = (Player) event.getSource().getDirectEntity();
             float hauntIncrease;
-            if(victim instanceof Villager){hauntIncrease = 10f;}
-            else if(victim instanceof Player){hauntIncrease = 25f;}
-            else if(victim instanceof AbstractGolem){hauntIncrease = 7.5f;}
-            else if(victim instanceof Wolf || victim instanceof Axolotl || victim instanceof Cat || victim instanceof Parrot) {hauntIncrease = 12.5f;}
-            else {hauntIncrease = 1f;}
+            if(victim instanceof Villager){hauntIncrease = EerieHauntings.serverConfig.VILLAGERHAUNTCHANCE.get().floatValue();}
+            else if(victim instanceof Player){hauntIncrease = EerieHauntings.serverConfig.PLAYERHAUNTCHANCE.get().floatValue();}
+            else if(victim instanceof AbstractGolem){hauntIncrease = EerieHauntings.serverConfig.GOLEMHAUNTCHANCE.get().floatValue();}
+            else if(victim instanceof TamableAnimal) {hauntIncrease = EerieHauntings.serverConfig.PETHAUNTCHANCE.get().floatValue();}
+            else {hauntIncrease = EerieHauntings.serverConfig.MISCHAUNTCHANCE.get().floatValue();}
 
             aggressor.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
                 h.addHauntChance(hauntIncrease);
@@ -271,7 +272,7 @@ public class ForgeBusEvents {
                 }
                 if(h.getProtectedDays() > 0){h.setProtectedDays(h.getProtectedDays() - 1);}
                 //reset haunt chances for all.
-                h.setHauntChance(1);
+                h.setHauntChance(EerieHauntings.serverConfig.NORMALHAUNTCHANCE.get().floatValue());
             });
         }
     }
@@ -292,51 +293,55 @@ public class ForgeBusEvents {
     }
 
     private static void moderateEffect(ServerPlayer player){
-        int random = player.getRandom().nextInt(3);
-        switch (random){
-            case 0 -> {
-                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 350, 0));
+        if(EerieHauntings.serverConfig.MEDIUMEFFECT.get()) {
+            int random = player.getRandom().nextInt(3);
+            switch (random) {
+                case 0 -> {
+                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 350, 0));
 //                player.displayClientMessage(new TranslatableComponent("ghost.moderateslow.alert"), false);
-            }
-            case 1 -> {
-                player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 350, 0));
+                }
+                case 1 -> {
+                    player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 350, 0));
 //                player.displayClientMessage(new TranslatableComponent("ghost.moderateblind.alert"), false);
-            }
-            case 2 -> {
-                player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 350, 0));
+                }
+                case 2 -> {
+                    player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 350, 0));
 //                player.displayClientMessage(new TranslatableComponent("ghost.moderateweakness.alert"), false);
+                }
             }
-        }
-        MediumClientSoundMessenger.sendTo(new MediumClientSoundPacket(player.getId()), player);
+            MediumClientSoundMessenger.sendTo(new MediumClientSoundPacket(player.getId()), player);
+        }else {lightEffect(player);}
     }
 
     private static void strongEffect(ServerPlayer player){
-        int random = player.getRandom().nextInt(3);
-        switch (random){
-            case 0 ->{
-                player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 200, 0));
-                player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
-                    h.setEffectID(1);
-                    h.setVisualEffectTime(200);
-                    ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(player.getId(), 200, 1), player);
-                });
+        if(EerieHauntings.serverConfig.STRONGEFFECT.get()) {
+            int random = player.getRandom().nextInt(3);
+            switch (random) {
+                case 0 -> {
+                    player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 200, 0));
+                    player.getCapability(PlayerCapability.INSTANCE).ifPresent(h -> {
+                        h.setEffectID(1);
+                        h.setVisualEffectTime(200);
+                        ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(player.getId(), 200, 1), player);
+                    });
 //                player.displayClientMessage(new TranslatableComponent("ghost.stronglevitate.alert"), false);
-            }
-            case 1 ->{
-                player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
+                }
+                case 1 -> {
+                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
 //                player.displayClientMessage(new TranslatableComponent("ghost.strongconfusion.alert"), false);
-            }
-            case 2 ->{
-                player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 200, 0));
-                player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
-                    h.setEffectID(2);
-                    h.setVisualEffectTime(200);
-                    ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(player.getId(), 200, 2), player);
-                });
+                }
+                case 2 -> {
+                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 200, 0));
+                    player.getCapability(PlayerCapability.INSTANCE).ifPresent(h -> {
+                        h.setEffectID(2);
+                        h.setVisualEffectTime(200);
+                        ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(player.getId(), 200, 2), player);
+                    });
 //                player.displayClientMessage(new TranslatableComponent("ghost.stronghunger.alert"), false);
+                }
             }
-        }
-        StrongClientSoundMessenger.sendTo(new StrongClientSoundPacket(player.getId()), player);
+            StrongClientSoundMessenger.sendTo(new StrongClientSoundPacket(player.getId()), player);
+        }else {lightEffect(player);}
     }
 
     //Ghost removal w/o making the ghost angry (or letting it calm down first)
@@ -367,27 +372,27 @@ public class ForgeBusEvents {
             int rand = player.getRandom().nextInt(6);
             switch (rand){
                 case 0 ->{
-                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 72000, 0, false, false));
+                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
                     player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.speed").withStyle(ChatFormatting.AQUA), false);
                 }
                 case 1 ->{
-                    player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 72000, 0, false, false));
+                    player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
                     player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.haste").withStyle(ChatFormatting.YELLOW), false);
                 }
                 case 2 ->{
-                    player.addEffect(new MobEffectInstance(MobEffects.JUMP, 72000, 0, false, false));
+                    player.addEffect(new MobEffectInstance(MobEffects.JUMP, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
                     player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.jump").withStyle(ChatFormatting.GREEN), false);
                 }
                 case 3 ->{
-                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 72000, 0, false, false));
+                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
                     player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.resistance").withStyle(ChatFormatting.RED), false);
                 }
                 case 4 ->{
-                    player.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 72000, 1, false, false));
+                    player.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 72000, 1+EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
                     player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.life").withStyle(ChatFormatting.LIGHT_PURPLE), false);
                 }
                 case 5 ->{
-                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 72000, 0, false, false));
+                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
                     player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.strength").withStyle(ChatFormatting.DARK_RED), false);
                 }
             }

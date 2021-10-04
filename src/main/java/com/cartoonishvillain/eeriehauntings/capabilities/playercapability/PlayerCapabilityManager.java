@@ -1,5 +1,6 @@
 package com.cartoonishvillain.eeriehauntings.capabilities.playercapability;
 
+import com.cartoonishvillain.eeriehauntings.EerieHauntings;
 import com.cartoonishvillain.eeriehauntings.capabilities.worldcapability.IWorldCapability;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -15,7 +16,7 @@ public class PlayerCapabilityManager implements IPlayerCapability, ICapabilityPr
     public final LazyOptional<IPlayerCapability> holder = LazyOptional.of(()->this);
     protected boolean haunted = false;
     protected boolean anger = false;
-    protected float hauntChance = 1;
+    protected float hauntChance = EerieHauntings.serverConfig.NORMALHAUNTCHANCE.get().floatValue();
     protected int ghostType = 0;
     protected int protectedDays = 0;
     protected int hauntTicks = 0;
