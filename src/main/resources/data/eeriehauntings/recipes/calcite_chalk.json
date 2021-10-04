@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "# C",
+    " C ",
+    "C E"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "C": {
+      "item": "minecraft:calcite"
+    },
+    "E": {
+      "item": "eeriehauntings:unearthly_shard"
+    }
+  },
+  "result": {
+    "item": "eeriehauntings:calcite_chalk",
+    "count": 1
+  }
+}

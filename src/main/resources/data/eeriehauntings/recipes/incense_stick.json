@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##H",
+    "#H#",
+    "/##"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:sugar"
+    },
+    "H": {
+      "item": "minecraft:honeycomb"
+    },
+    "/": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "eeriehauntings:incense_stick",
+    "count": 1
+  }
+}
