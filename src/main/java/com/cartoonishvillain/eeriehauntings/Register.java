@@ -29,8 +29,8 @@ public class Register {
     public static final RegistryObject<SoundEvent> RADIOSOUND = SOUND_EVENT.register("radio", () -> new SoundEvent(new ResourceLocation(EerieHauntings.MODID, "radio")));
 
 
-    public static final RegistryObject<Item> EMFCOUNTER = ITEMS.register("emf_counter", () -> new EMFCounter(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
-    public static final RegistryObject<Item> OLDRADIO = ITEMS.register("old_radio", () -> new Radio(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
+    public static final RegistryObject<Item> EMFCOUNTER = ITEMS.register("emf_counter", () -> new EMFCounter(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1)));
+    public static final RegistryObject<Item> OLDRADIO = ITEMS.register("old_radio", () -> new Radio(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1)));
     public static final RegistryObject<Item> UNEARTHLYSHARD = ITEMS.register("unearthly_shard", () -> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS)));
     public static final RegistryObject<Item> UNEARTHLYGEM = ITEMS.register("unearthly_gem", () -> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS)));
     public static final RegistryObject<Item> INCENSESTICK = ITEMS.register("incense_stick", () -> new IncenseStick(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));

@@ -31,10 +31,12 @@ displayName="Eerie Hauntings" #mandatory
 # A text field displayed in the mod UI
 credits="" #optional
 # A text field displayed in the mod UI
-authors="Cartoonish Villains" #optional
+authors="Cartoonish Villain" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Some description here
+Spooks here, spooks there, spooks everywhere!
+
+Eerie Hauntings adds spirits that haunt the player everywhere they go! A player is more likely to be haunted when they kill! Exorcising the ghost properly makes ghosts drop semi-physical forms of their power which can be molded to benefit and protect you.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.eeriehauntings]] #optional
@@ -43,7 +45,7 @@ Some description here
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[37,)" #mandatory
+    versionRange="[37.0.75,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
