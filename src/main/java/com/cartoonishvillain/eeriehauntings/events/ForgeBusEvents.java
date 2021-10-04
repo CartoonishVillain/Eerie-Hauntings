@@ -266,6 +266,11 @@ public class ForgeBusEvents {
             }
             case 2 ->{
                 player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 200, 0));
+                player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
+                    h.setEffectID(2);
+                    h.setVisualEffectTime(200);
+                    ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(player.getId(), 200, 2), player);
+                });
 //                player.displayClientMessage(new TranslatableComponent("ghost.stronghunger.alert"), false);
             }
         }

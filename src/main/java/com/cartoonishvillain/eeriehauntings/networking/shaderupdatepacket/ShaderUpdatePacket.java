@@ -59,6 +59,7 @@ public class ShaderUpdatePacket {
         switch (shaderID){
             default -> {return new ResourceLocation("shaders/post/invert.json");}
             case 1 -> {return new ResourceLocation("shaders/post/flip.json");}
+            case 2 -> {return new ResourceLocation("shaders/post/blobs.json");}
         }
     }
 
