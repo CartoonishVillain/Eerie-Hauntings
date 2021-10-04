@@ -113,10 +113,6 @@ public class ForgeBusEvents {
         if (!event.player.level.isClientSide() && event.phase.equals(TickEvent.Phase.END)) {
             event.player.getCapability(PlayerCapability.INSTANCE).ifPresent(h -> {
 
-                //TODO: This line is a hacky workaround while there is an issue with capabilities while leaving the end. Look into the clone event.. commented out for now.
-                if(h.getVisualEffectTime() <= 0 && event.player.tickCount <= 5){ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(event.player.getId(), 0, 0), event.player);}
-
-
                 if (h.getIsHaunted() && h.checkHauntActionTicks()) {
                     if (event.player.level.isDay()) {
                         lightEffect((ServerPlayer) event.player);
@@ -210,26 +206,53 @@ public class ForgeBusEvents {
     }
 
 
-//    @SubscribeEvent
-//    public static void playerCloneEvent(PlayerEvent.Clone event){
-//        if(!event.isWasDeath()){
-//            //runs whenever player gets out of end
-//            Player originalPlayer = event.getOriginal();
-//            Player newPlayer = event.getPlayer();
-//
-//            //variables to store info
-//
-//            //code refuses to enter this code block, despite the capability showing up in variable viewer, and being active prior to entering the end portal
-//            originalPlayer.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
-//                //gather info
-//            });
-//
-//            //code enters just fine
-//            newPlayer.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
-//                //set info
-//            });
-//        }
-//    }
+    @SubscribeEvent
+    public static void playerCloneEvent(PlayerEvent.Clone event){
+        if(!event.isWasDeath()){
+            //runs whenever player gets out of end
+            Player originalPlayer = event.getOriginal();
+            Player newPlayer = event.getPlayer();
+
+             AtomicBoolean haunted = new AtomicBoolean(false);
+             AtomicBoolean anger = new AtomicBoolean(false);
+             AtomicReference<Float> hauntChance = new AtomicReference<>((float) 1);
+             AtomicInteger ghostType = new AtomicInteger();
+             AtomicInteger protectedDays = new AtomicInteger();
+             AtomicInteger hauntTicks = new AtomicInteger();
+             AtomicInteger effectTicks = new AtomicInteger();
+             AtomicInteger effectID = new AtomicInteger();
+
+             originalPlayer.revive();
+
+            //variables to store info
+
+            //code refuses to enter this code block, despite the capability showing up in variable viewer, and being active prior to entering the end portal
+            originalPlayer.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
+                //gather info
+                haunted.set(h.getIsHaunted());
+                anger.set(h.getAnger());
+                hauntChance.set(h.getHauntChance());
+                ghostType.set(h.getGhostType());
+                protectedDays.set(h.getProtectedDays());
+                hauntTicks.set(h.getHauntActionTicks());
+                effectTicks.set(h.getVisualEffectTime());
+                effectID.set(h.getEffectID());
+            });
+            originalPlayer.kill();
+            //code enters just fine
+            newPlayer.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
+                //set info
+                h.setHaunted(haunted.get());
+                h.setAnger(anger.get());
+                h.setHauntChance(hauntChance.get());
+                h.setGhostType(ghostType.get());
+                h.setProtectedDays(protectedDays.get());
+                h.setHauntActionTicks(hauntTicks.get());
+                h.setVisualEffectTime(effectTicks.get());
+                h.setEffectID(effectID.get());
+            });
+        }
+    }
 
 
 
