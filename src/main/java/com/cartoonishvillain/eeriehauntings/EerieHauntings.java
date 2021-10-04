@@ -1,5 +1,6 @@
 package com.cartoonishvillain.eeriehauntings;
 
+import com.cartoonishvillain.eeriehauntings.config.ClientConfig;
 import com.cartoonishvillain.eeriehauntings.config.ConfigHelper;
 import com.cartoonishvillain.eeriehauntings.config.ServerConfig;
 import com.cartoonishvillain.eeriehauntings.networking.lightsoundpackets.LightClientSoundMessenger;
@@ -26,11 +27,13 @@ public class EerieHauntings
     public static ArrayList<SoundEvent> lowEndSounds = new ArrayList<SoundEvent>(List.of(SoundEvents.GLASS_BREAK, SoundEvents.CREEPER_PRIMED, SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundEvents.WITHER_BREAK_BLOCK, SoundEvents.CHEST_OPEN, SoundEvents.WITHER_SPAWN, SoundEvents.WITHER_AMBIENT, SoundEvents.LAVA_EXTINGUISH, SoundEvents.PISTON_CONTRACT, SoundEvents.PISTON_EXTEND, SoundEvents.TNT_PRIMED, SoundEvents.GENERIC_EXPLODE, SoundEvents.ENDER_DRAGON_GROWL, SoundEvents.AMBIENT_CAVE, SoundEvents.AMBIENT_CAVE));
     public static final String MODID = "eeriehauntings";
     public static ServerConfig serverConfig;
+    public static ClientConfig clientConfig;
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
 
     public EerieHauntings() {
         serverConfig = ConfigHelper.register(ModConfig.Type.SERVER, ServerConfig::new);
+        clientConfig = ConfigHelper.register(ModConfig.Type.CLIENT, ClientConfig::new);
         LightClientSoundMessenger.register();
         MediumClientSoundMessenger.register();
         StrongClientSoundMessenger.register();

@@ -44,7 +44,7 @@ public class ShaderUpdatePacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             Entity entity = Minecraft.getInstance().level.getEntity(ID);
-            if(entity instanceof Player){
+            if(entity instanceof Player && EerieHauntings.clientConfig.SHADERS.get()){
                 entity.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
                     h.setVisualEffectTime(ticks);
                     h.setEffectID(shaderID);
