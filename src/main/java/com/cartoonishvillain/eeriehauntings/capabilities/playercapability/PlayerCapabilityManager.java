@@ -15,7 +15,7 @@ public class PlayerCapabilityManager implements IPlayerCapability, ICapabilityPr
     public final LazyOptional<IPlayerCapability> holder = LazyOptional.of(()->this);
     protected boolean haunted = false;
     protected boolean anger = false;
-    protected float hauntChance = 0;
+    protected float hauntChance = 1;
     protected int ghostType = 0;
     protected int protectedDays = 0;
     protected int hauntTicks = 0;
