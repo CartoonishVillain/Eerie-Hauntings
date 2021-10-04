@@ -49,7 +49,12 @@ public class ShaderUpdatePacket {
                     h.setVisualEffectTime(ticks);
                     h.setEffectID(shaderID);
                 });
-                Minecraft.getInstance().gameRenderer.loadEffect(idTranslator(shaderID));
+                ResourceLocation resourceLocation = idTranslator(shaderID);
+                if(resourceLocation != null)
+                Minecraft.getInstance().gameRenderer.loadEffect(resourceLocation);
+                else{
+                    Minecraft.getInstance().gameRenderer.shutdownEffect();
+                }
             }
         });
         context.setPacketHandled(true);
@@ -57,7 +62,7 @@ public class ShaderUpdatePacket {
 
     public ResourceLocation idTranslator(int shaderID){
         switch (shaderID){
-            default -> {return new ResourceLocation("shaders/post/invert.json");}
+            default -> {return null;}
             case 1 -> {return new ResourceLocation("shaders/post/flip.json");}
             case 2 -> {return new ResourceLocation("shaders/post/blobs.json");}
         }

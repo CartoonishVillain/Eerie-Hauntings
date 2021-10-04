@@ -39,12 +39,15 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Mod.EventBusSubscriber(modid = EerieHauntings.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 
@@ -108,7 +111,11 @@ public class ForgeBusEvents {
 
         if (!event.player.level.isClientSide() && event.phase.equals(TickEvent.Phase.END)) {
             event.player.getCapability(PlayerCapability.INSTANCE).ifPresent(h -> {
-                if (h.checkHauntActionTicks())
+
+                //TODO: This line is a hacky workaround while there is an issue with capabilities while leaving the end. Look into the clone event.. commented out for now.
+                if(h.getVisualEffectTime() <= 0 && event.player.tickCount <= 5){ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(event.player.getId(), 0, 0), event.player);}
+
+
                 if (h.getIsHaunted() && h.checkHauntActionTicks()) {
                     if (event.player.level.isDay()) {
                         lightEffect((ServerPlayer) event.player);
@@ -158,6 +165,7 @@ public class ForgeBusEvents {
                     }
 
                 }
+                if(!h.getIsHaunted()) h.setHauntActionTicks(0);
             });
         }
     }
@@ -191,6 +199,28 @@ public class ForgeBusEvents {
             });
         }
     }
+
+
+//    @SubscribeEvent
+//    public static void playerCloneEvent(PlayerEvent.Clone event){
+//        if(!event.isWasDeath()){
+//            //runs whenever player gets out of end
+//            Player originalPlayer = event.getOriginal();
+//            Player newPlayer = event.getPlayer();
+//
+//            //variables to store info
+//
+//            //code refuses to enter this code block, despite the capability showing up in variable viewer, and being active prior to entering the end portal
+//            originalPlayer.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
+//                //gather info
+//            });
+//
+//            //code enters just fine
+//            newPlayer.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
+//                //set info
+//            });
+//        }
+//    }
 
 
 
