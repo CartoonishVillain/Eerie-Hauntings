@@ -2,11 +2,11 @@ package com.cartoonishvillain.eeriehauntings.networking.strongsoundpackets;
 
 import com.cartoonishvillain.eeriehauntings.Register;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.SoundCategory;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -18,15 +18,15 @@ public class StrongClientSoundPacket {
         this.ID = id;
     }
 
-    public StrongClientSoundPacket(FriendlyByteBuf packetBuffer) {
+    public StrongClientSoundPacket(PacketBuffer packetBuffer) {
         ID = packetBuffer.readInt();
     }
 
-    public void encode(FriendlyByteBuf buffer){
+    public void encode(PacketBuffer buffer){
         buffer.writeInt(ID);
     }
 
-    public static StrongClientSoundPacket decode(FriendlyByteBuf buf) {
+    public static StrongClientSoundPacket decode(PacketBuffer buf) {
         return new StrongClientSoundPacket(buf);
     }
 
@@ -34,9 +34,9 @@ public class StrongClientSoundPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             Entity entity = Minecraft.getInstance().level.getEntity(ID);
-            if(entity instanceof Player){
-                float randomPitch =  ((Player) entity).getRandom().nextFloat();
-               entity.level.playSound((Player) entity, entity.getX(), entity.getY(), entity.getZ(), Register.STRONGSTRENGTHSOUNDS.get(), SoundSource.MASTER, 1.5f, randomPitch);
+            if(entity instanceof PlayerEntity){
+                float randomPitch =  ((PlayerEntity) entity).getRandom().nextFloat();
+               entity.level.playSound((PlayerEntity) entity, entity.getX(), entity.getY(), entity.getZ(), Register.STRONGSTRENGTHSOUNDS.get(), SoundCategory.MASTER, 1.5f, randomPitch);
             }
         });
         context.setPacketHandled(true);

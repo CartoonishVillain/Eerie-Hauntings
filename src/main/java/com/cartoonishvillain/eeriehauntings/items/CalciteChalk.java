@@ -2,16 +2,16 @@ package com.cartoonishvillain.eeriehauntings.items;
 
 import com.cartoonishvillain.eeriehauntings.EerieHauntings;
 import com.cartoonishvillain.eeriehauntings.capabilities.playercapability.PlayerCapability;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -22,26 +22,27 @@ public class CalciteChalk extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level p_41432_, Player p_41433_, InteractionHand p_41434_) {
-        if(!p_41432_.isClientSide()) {
-            p_41433_.getCapability(PlayerCapability.INSTANCE).ifPresent(h -> {
+    public ActionResult<ItemStack> use(World p_77659_1_, PlayerEntity p_77659_2_, Hand p_77659_3_) {
+        if(!p_77659_1_.isClientSide()) {
+            p_77659_2_.getCapability(PlayerCapability.INSTANCE).ifPresent(h -> {
                 if (!h.getIsHaunted()) {
                     h.setProtectedDays(EerieHauntings.serverConfig.CHALKDURATION.get());
-                    p_41433_.displayClientMessage(new TranslatableComponent("info.eeriehauntings.activatechalk", EerieHauntings.serverConfig.CHALKDURATION.get()), false);
-                    p_41433_.getCooldowns().addCooldown(this, 100);
-                    p_41433_.getItemInHand(p_41434_).shrink(1);
+                    p_77659_2_.displayClientMessage(new TranslationTextComponent("info.eeriehauntings.activatechalk", EerieHauntings.serverConfig.CHALKDURATION.get()), false);
+                    p_77659_2_.getCooldowns().addCooldown(this, 100);
+                    p_77659_2_.getItemInHand(p_77659_3_).shrink(1);
                 } else {
-                    p_41433_.displayClientMessage(new TranslatableComponent("info.eeriehauntings.failactivatechalk"), false);
-                    p_41433_.getCooldowns().addCooldown(this, 100);
+                    p_77659_2_.displayClientMessage(new TranslationTextComponent("info.eeriehauntings.failactivatechalk"), false);
+                    p_77659_2_.getCooldowns().addCooldown(this, 100);
                 }
             });
         }
-        return super.use(p_41432_, p_41433_, p_41434_);
+        return super.use(p_77659_1_, p_77659_2_, p_77659_3_);
     }
 
     @Override
-    public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> p_41423_, TooltipFlag p_41424_) {
-        super.appendHoverText(p_41421_, p_41422_, p_41423_, p_41424_);
-        p_41423_.add(new TranslatableComponent("info.eeriehauntings.calciteexplain", EerieHauntings.serverConfig.CHALKDURATION.get()).withStyle(ChatFormatting.GOLD));
+    public void appendHoverText(ItemStack p_77624_1_, @Nullable World p_77624_2_, List<ITextComponent> p_77624_3_, ITooltipFlag p_77624_4_) {
+        super.appendHoverText(p_77624_1_, p_77624_2_, p_77624_3_, p_77624_4_);
+        p_77624_3_.add(new TranslationTextComponent("info.eeriehauntings.calciteexplain", EerieHauntings.serverConfig.CHALKDURATION.get()).withStyle(TextFormatting.GOLD));
     }
+
 }

@@ -1,9 +1,8 @@
 package com.cartoonishvillain.eeriehauntings.capabilities.playercapability;
 
 import com.cartoonishvillain.eeriehauntings.EerieHauntings;
-import com.cartoonishvillain.eeriehauntings.capabilities.worldcapability.IWorldCapability;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -12,7 +11,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class PlayerCapabilityManager implements IPlayerCapability, ICapabilityProvider, INBTSerializable<CompoundTag> {
+public class PlayerCapabilityManager implements IPlayerCapability, ICapabilityProvider, INBTSerializable<CompoundNBT> {
     public final LazyOptional<IPlayerCapability> holder = LazyOptional.of(()->this);
     protected boolean haunted = false;
     protected boolean anger = false;
@@ -121,9 +120,11 @@ public class PlayerCapabilityManager implements IPlayerCapability, ICapabilityPr
         else return LazyOptional.empty();
     }
 
+
+
     @Override
-    public CompoundTag serializeNBT() {
-        CompoundTag tag = new CompoundTag();
+    public CompoundNBT serializeNBT() {
+        CompoundNBT tag = new CompoundNBT();
         tag.putBoolean("haunted", haunted);
         tag.putBoolean("anger", anger);
         tag.putFloat("hauntchance", hauntChance);
@@ -136,7 +137,7 @@ public class PlayerCapabilityManager implements IPlayerCapability, ICapabilityPr
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(CompoundNBT nbt) {
         haunted = nbt.getBoolean("haunted");
         anger = nbt.getBoolean("anger");
         hauntChance = nbt.getFloat("hauntchance");

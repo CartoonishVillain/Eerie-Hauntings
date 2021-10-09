@@ -17,7 +17,6 @@ package com.cartoonishvillain.eeriehauntings.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -51,7 +50,7 @@ public class ConfigHelper
 
         modContext.registerConfig(configType, spec);
 
-        final Consumer<ModConfigEvent> configUpdate = event ->
+        final Consumer<ModConfig.ModConfigEvent> configUpdate = event ->
         {
             if(event.getConfig().getSpec() == spec)
                 for(ConfigValueListener<?> value : subscriptionList)

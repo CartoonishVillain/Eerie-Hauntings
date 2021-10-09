@@ -1,12 +1,13 @@
 package com.cartoonishvillain.eeriehauntings.items;
 
 import com.cartoonishvillain.eeriehauntings.Register;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.item.IItemTier;
+import net.minecraft.item.crafting.Ingredient;
+
 
 import java.util.function.Supplier;
 
-public enum Materials implements Tier {
+public enum Materials implements IItemTier {
 
     UNEARTHLY(0, 256, 2.5f, 0, 30, () ->{return Ingredient.of(Register.UNEARTHLYGEM.get());});
 

@@ -1,11 +1,11 @@
 package com.cartoonishvillain.eeriehauntings.networking.lightsoundpackets;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fmllegacy.network.NetworkRegistry;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 public class LightClientSoundMessenger {
     private static String ProtocolVersion = "1";
@@ -17,8 +17,8 @@ public class LightClientSoundMessenger {
         INSTANCE.registerMessage(0, LightClientSoundPacket.class, LightClientSoundPacket::encode, LightClientSoundPacket::decode, LightClientSoundPacket::handle);
     }
 
-    public static void sendTo(Object message, Player player) {
-        INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), message);
+    public static void sendTo(Object message, PlayerEntity player) {
+        INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), message);
     }
 
 }

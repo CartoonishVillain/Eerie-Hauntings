@@ -1,7 +1,7 @@
 package com.cartoonishvillain.eeriehauntings.capabilities.worldcapability;
 
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -9,7 +9,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 
-public class WorldCapabilityManager implements IWorldCapability, ICapabilityProvider, INBTSerializable<CompoundTag> {
+public class WorldCapabilityManager implements IWorldCapability, ICapabilityProvider, INBTSerializable<CompoundNBT> {
     public final LazyOptional<IWorldCapability> holder = LazyOptional.of(()->this);
     protected boolean night = false;
 
@@ -21,14 +21,14 @@ public class WorldCapabilityManager implements IWorldCapability, ICapabilityProv
     }
 
     @Override
-    public CompoundTag serializeNBT() {
-        CompoundTag tag = new CompoundTag();
+    public CompoundNBT serializeNBT() {
+        CompoundNBT tag = new CompoundNBT();
         tag.putBoolean("night", night);
         return tag;
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(CompoundNBT nbt) {
         night = nbt.getBoolean("night");
     }
 
@@ -41,4 +41,5 @@ public class WorldCapabilityManager implements IWorldCapability, ICapabilityProv
     public void setisNight(boolean status) {
         night = status;
     }
+
 }

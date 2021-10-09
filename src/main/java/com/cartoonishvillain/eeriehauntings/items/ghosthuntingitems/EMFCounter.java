@@ -1,17 +1,17 @@
 package com.cartoonishvillain.eeriehauntings.items.ghosthuntingitems;
 
 import com.cartoonishvillain.eeriehauntings.Register;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -22,16 +22,17 @@ public class EMFCounter extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level p_41432_, Player p_41433_, InteractionHand p_41434_) {
+    public ActionResult<ItemStack> use(World p_41432_, PlayerEntity p_41433_, Hand p_41434_) {
         p_41433_.getCooldowns().addCooldown(this, 100);
-        p_41432_.playSound(null, p_41433_.getOnPos(), Register.EMFCOUNTERSOUNDS.get(), SoundSource.PLAYERS, 1, 1);
+        p_41432_.playSound(null, p_41433_.blockPosition(), Register.EMFCOUNTERSOUNDS.get(), SoundCategory.PLAYERS, 1, 1);
         return super.use(p_41432_, p_41433_, p_41434_);
     }
 
     @Override
-    public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> p_41423_, TooltipFlag p_41424_) {
+    public void appendHoverText(ItemStack p_41421_, @Nullable World p_41422_, List<ITextComponent> p_41423_, ITooltipFlag p_41424_) {
         super.appendHoverText(p_41421_, p_41422_, p_41423_, p_41424_);
-        p_41423_.add(new TranslatableComponent("info.eeriehauntings.emfdesc").withStyle(ChatFormatting.GOLD));
-        p_41423_.add(new TranslatableComponent("info.eeriehauntings.click").withStyle(ChatFormatting.BLUE));
+        p_41423_.add(new TranslationTextComponent("info.eeriehauntings.emfdesc").withStyle(TextFormatting.GOLD));
+        p_41423_.add(new TranslationTextComponent("info.eeriehauntings.click").withStyle(TextFormatting.BLUE));
     }
+
 }

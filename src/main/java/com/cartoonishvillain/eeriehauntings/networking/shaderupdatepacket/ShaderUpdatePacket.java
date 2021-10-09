@@ -3,12 +3,11 @@ package com.cartoonishvillain.eeriehauntings.networking.shaderupdatepacket;
 import com.cartoonishvillain.eeriehauntings.EerieHauntings;
 import com.cartoonishvillain.eeriehauntings.capabilities.playercapability.PlayerCapability;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -24,19 +23,19 @@ public class ShaderUpdatePacket {
         this.shaderID = shaderID;
     }
 
-    public ShaderUpdatePacket(FriendlyByteBuf packetBuffer) {
+    public ShaderUpdatePacket(PacketBuffer packetBuffer) {
         ID = packetBuffer.readInt();
         ticks = packetBuffer.readInt();
         shaderID = packetBuffer.readInt();
     }
 
-    public void encode(FriendlyByteBuf buffer){
+    public void encode(PacketBuffer buffer){
         buffer.writeInt(ID);
         buffer.writeInt(ticks);
         buffer.writeInt(shaderID);
     }
 
-    public static ShaderUpdatePacket decode(FriendlyByteBuf buf) {
+    public static ShaderUpdatePacket decode(PacketBuffer buf) {
         return new ShaderUpdatePacket(buf);
     }
 
@@ -44,7 +43,7 @@ public class ShaderUpdatePacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             Entity entity = Minecraft.getInstance().level.getEntity(ID);
-            if(entity instanceof Player && EerieHauntings.clientConfig.SHADERS.get()){
+            if(entity instanceof PlayerEntity && EerieHauntings.clientConfig.SHADERS.get()){
                 entity.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
                     h.setVisualEffectTime(ticks);
                     h.setEffectID(shaderID);
@@ -62,9 +61,9 @@ public class ShaderUpdatePacket {
 
     public ResourceLocation idTranslator(int shaderID){
         switch (shaderID){
-            default -> {return null;}
-            case 1 -> {return new ResourceLocation("shaders/post/flip.json");}
-            case 2 -> {return new ResourceLocation("shaders/post/blobs.json");}
+            default: {return null;}
+            case 1: {return new ResourceLocation("shaders/post/flip.json");}
+            case 2: {return new ResourceLocation("shaders/post/blobs.json");}
         }
     }
 

@@ -14,28 +14,27 @@ import com.cartoonishvillain.eeriehauntings.networking.shaderupdatepacket.Shader
 import com.cartoonishvillain.eeriehauntings.networking.shaderupdatepacket.ShaderUpdatePacket;
 import com.cartoonishvillain.eeriehauntings.networking.strongsoundpackets.StrongClientSoundMessenger;
 import com.cartoonishvillain.eeriehauntings.networking.strongsoundpackets.StrongClientSoundPacket;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.ChatType;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.passive.GolemEntity;
+import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.TamableAnimal;
-import net.minecraft.world.entity.animal.*;
-import net.minecraft.world.entity.animal.axolotl.Axolotl;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.ChatType;
+import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -57,7 +56,7 @@ public class ForgeBusEvents {
 
 
     @SubscribeEvent
-    public static void worldRegister(AttachCapabilitiesEvent<Level> event){
+    public static void worldRegister(AttachCapabilitiesEvent<World> event){
         if(event.getObject().dimension().toString().contains("overworld")){
         WorldCapabilityManager provider = new WorldCapabilityManager();
         event.addCapability(new ResourceLocation(EerieHauntings.MODID, "worldtimer"), provider);}
@@ -65,7 +64,7 @@ public class ForgeBusEvents {
 
     @SubscribeEvent
     public static void playerRegister(AttachCapabilitiesEvent<Entity> event){
-        if(event.getObject() instanceof Player) {
+        if(event.getObject() instanceof PlayerEntity) {
             PlayerCapabilityManager provider = new PlayerCapabilityManager();
             event.addCapability(new ResourceLocation(EerieHauntings.MODID, "haunting"), provider);
         }
@@ -116,20 +115,20 @@ public class ForgeBusEvents {
 
                 if (h.getIsHaunted() && h.checkHauntActionTicks()) {
                     if (event.player.level.isDay()) {
-                        lightEffect((ServerPlayer) event.player);
+                        lightEffect((ServerPlayerEntity) event.player);
 
                     } else {
                         if (!h.getAnger()) {
                             int chance = event.player.getRandom().nextInt(10);
                             if (chance <= 5) {
-                                lightEffect((ServerPlayer) event.player);
+                                lightEffect((ServerPlayerEntity) event.player);
                             } else if (chance <= 7) {
-                                moderateEffect((ServerPlayer) event.player);
+                                moderateEffect((ServerPlayerEntity) event.player);
                             } else if (chance <= 8) {
-                                lightEffect((ServerPlayer) event.player);
-                                moderateEffect((ServerPlayer) event.player);
+                                lightEffect((ServerPlayerEntity) event.player);
+                                moderateEffect((ServerPlayerEntity) event.player);
                             } else {
-                                strongEffect((ServerPlayer) event.player);
+                                strongEffect((ServerPlayerEntity) event.player);
                             }
 
                         }
@@ -138,14 +137,14 @@ public class ForgeBusEvents {
                         else {
                             int chance = event.player.getRandom().nextInt(10);
                             if (chance <= 2) {
-                                lightEffect((ServerPlayer) event.player);
+                                lightEffect((ServerPlayerEntity) event.player);
                             } else if (chance <= 5) {
-                                moderateEffect((ServerPlayer) event.player);
+                                moderateEffect((ServerPlayerEntity) event.player);
                             } else if (chance <= 7) {
-                                lightEffect((ServerPlayer) event.player);
-                                moderateEffect((ServerPlayer) event.player);
+                                lightEffect((ServerPlayerEntity) event.player);
+                                moderateEffect((ServerPlayerEntity) event.player);
                             } else {
-                                strongEffect((ServerPlayer) event.player);
+                                strongEffect((ServerPlayerEntity) event.player);
                             }
                         }
                     }
@@ -153,13 +152,13 @@ public class ForgeBusEvents {
 
                     if(event.player.getMainHandItem().getItem().equals(Register.OLDRADIO.get()) && h.getGhostType() != 1 && h.getGhostType() != 0){
                         event.player.getCooldowns().addCooldown(Register.OLDRADIO.get(), 100);
-                        event.player.level.playSound(null, event.player.getOnPos(), Register.RADIOSOUND.get(), SoundSource.MASTER, 1, 1);
-                        event.player.displayClientMessage(new TranslatableComponent("item.eeriehauntings.radio").withStyle(ChatFormatting.GOLD), true);
+                        event.player.level.playSound(null, event.player.blockPosition(), Register.RADIOSOUND.get(), SoundCategory.MASTER, 1, 1);
+                        event.player.displayClientMessage(new TranslationTextComponent("item.eeriehauntings.radio").withStyle(TextFormatting.GOLD), true);
                     }
                     else if(event.player.getMainHandItem().getItem().equals(Register.EMFCOUNTER.get()) && h.getGhostType() != 2 && h.getGhostType() != 0){
                         event.player.getCooldowns().addCooldown(Register.EMFCOUNTER.get(), 100);
-                        event.player.level.playSound(null, event.player.getOnPos(), Register.EMFCOUNTERSOUNDS.get(), SoundSource.MASTER, 1, 1);
-                        event.player.displayClientMessage(new TranslatableComponent("item.eeriehauntings.emf").withStyle(ChatFormatting.GOLD), true);
+                        event.player.level.playSound(null, event.player.blockPosition(), Register.EMFCOUNTERSOUNDS.get(), SoundCategory.MASTER, 1, 1);
+                        event.player.displayClientMessage(new TranslationTextComponent("item.eeriehauntings.emf").withStyle(TextFormatting.GOLD), true);
                     }
 
                 }
@@ -172,13 +171,13 @@ public class ForgeBusEvents {
     public static void entityKilled(LivingDeathEvent event){
         //The death of entities may cause a user to be haunted... Some entities are stronger willed than others.
         LivingEntity victim = event.getEntityLiving();
-        if(!victim.level.isClientSide() && event.getSource().getDirectEntity() instanceof Player) {
-            Player aggressor = (Player) event.getSource().getDirectEntity();
+        if(!victim.level.isClientSide() && event.getSource().getDirectEntity() instanceof PlayerEntity) {
+            PlayerEntity aggressor = (PlayerEntity) event.getSource().getDirectEntity();
             float hauntIncrease;
-            if(victim instanceof Villager){hauntIncrease = EerieHauntings.serverConfig.VILLAGERHAUNTCHANCE.get().floatValue();}
-            else if(victim instanceof Player){hauntIncrease = EerieHauntings.serverConfig.PLAYERHAUNTCHANCE.get().floatValue();}
-            else if(victim instanceof AbstractGolem){hauntIncrease = EerieHauntings.serverConfig.GOLEMHAUNTCHANCE.get().floatValue();}
-            else if(victim instanceof TamableAnimal) {hauntIncrease = EerieHauntings.serverConfig.PETHAUNTCHANCE.get().floatValue();}
+            if(victim instanceof VillagerEntity){hauntIncrease = EerieHauntings.serverConfig.VILLAGERHAUNTCHANCE.get().floatValue();}
+            else if(victim instanceof PlayerEntity){hauntIncrease = EerieHauntings.serverConfig.PLAYERHAUNTCHANCE.get().floatValue();}
+            else if(victim instanceof GolemEntity){hauntIncrease = EerieHauntings.serverConfig.GOLEMHAUNTCHANCE.get().floatValue();}
+            else if(victim instanceof TameableEntity) {hauntIncrease = EerieHauntings.serverConfig.PETHAUNTCHANCE.get().floatValue();}
             else {hauntIncrease = EerieHauntings.serverConfig.MISCHAUNTCHANCE.get().floatValue();}
 
             aggressor.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
@@ -189,10 +188,10 @@ public class ForgeBusEvents {
 
     @SubscribeEvent
     public static void playerJoinEvent(EntityJoinWorldEvent event){
-        if(!event.getWorld().isClientSide() && event.getEntity() instanceof Player){
+        if(!event.getWorld().isClientSide() && event.getEntity() instanceof PlayerEntity){
             event.getEntity().getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
                 if(h.getVisualEffectTime() > 0){
-                    ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(event.getEntity().getId(), h.getVisualEffectTime(), h.getEffectID()), (Player) event.getEntity());
+                    ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(event.getEntity().getId(), h.getVisualEffectTime(), h.getEffectID()), (PlayerEntity) event.getEntity());
                 }
             });
         }
@@ -201,8 +200,8 @@ public class ForgeBusEvents {
     @SubscribeEvent
     public static void ItemToolTips(ItemTooltipEvent event){
         if(event.getItemStack().getItem().equals(Register.UNEARTHLYSHARD.get())){
-            event.getToolTip().add(new TranslatableComponent("info.eeriehauntings.shard").withStyle(ChatFormatting.GOLD));
-            event.getToolTip().add(new TranslatableComponent("info.eeriehauntings.shardgain").withStyle(ChatFormatting.RED));
+            event.getToolTip().add(new TranslationTextComponent("info.eeriehauntings.shard").withStyle(TextFormatting.GOLD));
+            event.getToolTip().add(new TranslationTextComponent("info.eeriehauntings.shardgain").withStyle(TextFormatting.RED));
         }
     }
 
@@ -211,8 +210,8 @@ public class ForgeBusEvents {
     public static void playerCloneEvent(PlayerEvent.Clone event){
         if(!event.isWasDeath()){
             //runs whenever player gets out of end
-            Player originalPlayer = event.getOriginal();
-            Player newPlayer = event.getPlayer();
+            PlayerEntity originalPlayer = event.getOriginal();
+            PlayerEntity newPlayer = event.getPlayer();
 
              AtomicBoolean haunted = new AtomicBoolean(false);
              AtomicBoolean anger = new AtomicBoolean(false);
@@ -258,8 +257,8 @@ public class ForgeBusEvents {
 
 
     private static void HauntCheck(MinecraftServer server){
-        List<ServerPlayer> players = server.getPlayerList().getPlayers();
-        for(ServerPlayer player : players){
+        List<ServerPlayerEntity> players = server.getPlayerList().getPlayers();
+        for(ServerPlayerEntity player : players){
             player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
                 //if the player isn't haunted and isn't protected from haunting, attempt to haunt
                 if(!h.getIsHaunted() && h.getProtectedDays() == 0){
@@ -278,8 +277,8 @@ public class ForgeBusEvents {
     }
 
     private static void ResetGhostAngers(MinecraftServer server){
-        List<ServerPlayer> players = server.getPlayerList().getPlayers();
-        for(ServerPlayer player : players){
+        List<ServerPlayerEntity> players = server.getPlayerList().getPlayers();
+        for(ServerPlayerEntity player : players){
             player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
                 h.setAnger(false);
             });
@@ -287,57 +286,60 @@ public class ForgeBusEvents {
     }
 
 
-    private static void lightEffect(ServerPlayer player){
+    private static void lightEffect(ServerPlayerEntity player){
         int soundID = player.getRandom().nextInt(EerieHauntings.lowEndSounds.size());
         LightClientSoundMessenger.sendTo(new LightClientSoundPacket(player.getId(), soundID), player);
     }
 
-    private static void moderateEffect(ServerPlayer player){
+    private static void moderateEffect(ServerPlayerEntity player){
         if(EerieHauntings.serverConfig.MEDIUMEFFECT.get()) {
             int random = player.getRandom().nextInt(3);
             switch (random) {
-                case 0 -> {
-                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 350, 0));
-//                player.displayClientMessage(new TranslatableComponent("ghost.moderateslow.alert"), false);
-                }
-                case 1 -> {
-                    player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 350, 0));
-//                player.displayClientMessage(new TranslatableComponent("ghost.moderateblind.alert"), false);
-                }
-                case 2 -> {
-                    player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 350, 0));
-//                player.displayClientMessage(new TranslatableComponent("ghost.moderateweakness.alert"), false);
-                }
+                case 0:
+                    player.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 350, 0));
+//                player.displayClientMessage(new TranslationTextComponent()("ghost.moderateslow.alert"), false);
+                    break;
+                case 1:
+                    player.addEffect(new EffectInstance(Effects.BLINDNESS, 350, 0));
+//                player.displayClientMessage(new TranslationTextComponent()("ghost.moderateblind.alert"), false);
+                    break;
+                case 2:
+                    player.addEffect(new EffectInstance(Effects.WEAKNESS, 350, 0));
+//                player.displayClientMessage(new TranslationTextComponent()("ghost.moderateweakness.alert"), false);
+                    break;
             }
             MediumClientSoundMessenger.sendTo(new MediumClientSoundPacket(player.getId()), player);
         }else {lightEffect(player);}
     }
 
-    private static void strongEffect(ServerPlayer player){
+    private static void strongEffect(ServerPlayerEntity player){
         if(EerieHauntings.serverConfig.STRONGEFFECT.get()) {
             int random = player.getRandom().nextInt(3);
             switch (random) {
-                case 0 -> {
-                    player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 200, 0));
+                case 0: {
+                    player.addEffect(new EffectInstance(Effects.LEVITATION, 200, 0));
                     player.getCapability(PlayerCapability.INSTANCE).ifPresent(h -> {
                         h.setEffectID(1);
                         h.setVisualEffectTime(200);
                         ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(player.getId(), 200, 1), player);
                     });
-//                player.displayClientMessage(new TranslatableComponent("ghost.stronglevitate.alert"), false);
+                    break;
+//                player.displayClientMessage(new TranslationTextComponent()("ghost.stronglevitate.alert"), false);
                 }
-                case 1 -> {
-                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
-//                player.displayClientMessage(new TranslatableComponent("ghost.strongconfusion.alert"), false);
+                case 1: {
+                    player.addEffect(new EffectInstance(Effects.CONFUSION, 200, 0));
+//                player.displayClientMessage(new TranslationTextComponent()("ghost.strongconfusion.alert"), false);
+                    break;
                 }
-                case 2 -> {
-                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 200, 0));
+                case 2: {
+                    player.addEffect(new EffectInstance(Effects.HUNGER, 200, 0));
                     player.getCapability(PlayerCapability.INSTANCE).ifPresent(h -> {
                         h.setEffectID(2);
                         h.setVisualEffectTime(200);
                         ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(player.getId(), 200, 2), player);
                     });
-//                player.displayClientMessage(new TranslatableComponent("ghost.stronghunger.alert"), false);
+//                player.displayClientMessage(new TranslationTextComponent()("ghost.stronghunger.alert"), false);
+                    break;
                 }
             }
             StrongClientSoundMessenger.sendTo(new StrongClientSoundPacket(player.getId()), player);
@@ -345,7 +347,7 @@ public class ForgeBusEvents {
     }
 
     //Ghost removal w/o making the ghost angry (or letting it calm down first)
-    public static void exorciseGhost(ServerPlayer player){
+    public static void exorciseGhost(ServerPlayerEntity player){
         player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
             h.setHaunted(false);
             h.setGhostType(0);
@@ -357,7 +359,7 @@ public class ForgeBusEvents {
     }
 
     //Ghost removal while angry. Doesn't drop an unearthlyShard
-    public static void expellGhost(ServerPlayer player){
+    public static void expellGhost(ServerPlayerEntity player){
         player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
             h.setHaunted(false);
             h.setGhostType(0);
@@ -365,43 +367,49 @@ public class ForgeBusEvents {
     }
 
     //Ghost removal with an offering. Doesn't drop an unearthlyShard. Buffs the player.
-    public static void boonExpelGhost(ServerPlayer player){
+    public static void boonExpelGhost(ServerPlayerEntity player){
         player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
             h.setHaunted(false);
             h.setGhostType(0);
             if(EerieHauntings.serverConfig.BOON.get()) {
                 int rand = player.getRandom().nextInt(6);
                 switch (rand) {
-                    case 0 -> {
-                        player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
-                        player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.speed").withStyle(ChatFormatting.AQUA), false);
+                    case 0: {
+                        player.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
+                        player.displayClientMessage(new TranslationTextComponent("boon.eeriehauntings.speed").withStyle(TextFormatting.AQUA), false);
+                        break;
                     }
-                    case 1 -> {
-                        player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
-                        player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.haste").withStyle(ChatFormatting.YELLOW), false);
+                    case 1: {
+                        player.addEffect(new EffectInstance(Effects.DIG_SPEED, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
+                        player.displayClientMessage(new TranslationTextComponent("boon.eeriehauntings.haste").withStyle(TextFormatting.YELLOW), false);
+                        break;
                     }
-                    case 2 -> {
-                        player.addEffect(new MobEffectInstance(MobEffects.JUMP, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
-                        player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.jump").withStyle(ChatFormatting.GREEN), false);
+                    case 2: {
+                        player.addEffect(new EffectInstance(Effects.JUMP, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
+                        player.displayClientMessage(new TranslationTextComponent("boon.eeriehauntings.jump").withStyle(TextFormatting.GREEN), false);
+                        break;
                     }
-                    case 3 -> {
-                        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
-                        player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.resistance").withStyle(ChatFormatting.RED), false);
+                    case 3: {
+                        player.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
+                        player.displayClientMessage(new TranslationTextComponent("boon.eeriehauntings.resistance").withStyle(TextFormatting.RED), false);
+                        break;
                     }
-                    case 4 -> {
-                        player.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 72000, 1 + EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
-                        player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.life").withStyle(ChatFormatting.LIGHT_PURPLE), false);
+                    case 4: {
+                        player.addEffect(new EffectInstance(Effects.HEALTH_BOOST, 72000, 1 + EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
+                        player.displayClientMessage(new TranslationTextComponent("boon.eeriehauntings.life").withStyle(TextFormatting.LIGHT_PURPLE), false);
+                        break;
                     }
-                    case 5 -> {
-                        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
-                        player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.strength").withStyle(ChatFormatting.DARK_RED), false);
+                    case 5: {
+                        player.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
+                        player.displayClientMessage(new TranslationTextComponent("boon.eeriehauntings.strength").withStyle(TextFormatting.DARK_RED), false);
+                        break;
                     }
                 }
-            } else player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.disabled").withStyle(ChatFormatting.DARK_RED), false);
+            } else player.displayClientMessage(new TranslationTextComponent("boon.eeriehauntings.disabled").withStyle(TextFormatting.DARK_RED), false);
         });
     }
 
-    private static void broadcast(MinecraftServer server, Component translationTextComponent){
+    private static void broadcast(MinecraftServer server, TextComponent translationTextComponent){
         server.getPlayerList().broadcastMessage(translationTextComponent, ChatType.CHAT, UUID.randomUUID());
     }
 }
