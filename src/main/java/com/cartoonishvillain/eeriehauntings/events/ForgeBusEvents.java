@@ -35,6 +35,8 @@ import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -198,6 +200,7 @@ public class ForgeBusEvents {
     }
 
     @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
     public static void ItemToolTips(ItemTooltipEvent event){
         if(event.getItemStack().getItem().equals(Register.UNEARTHLYSHARD.get())){
             event.getToolTip().add(new TranslationTextComponent("info.eeriehauntings.shard").withStyle(TextFormatting.GOLD));
