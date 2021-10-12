@@ -17,6 +17,8 @@ public class ServerConfig {
     public ConfigHelper.ConfigValueListener<Double> MISCHAUNTCHANCE;
     public ConfigHelper.ConfigValueListener<Boolean> MEDIUMEFFECT;
     public ConfigHelper.ConfigValueListener<Boolean> STRONGEFFECT;
+    public ConfigHelper.ConfigValueListener<Boolean> PHYSEFFECT;
+    public ConfigHelper.ConfigValueListener<Integer> PHYSEFFECTRADIUS;
     public ConfigHelper.ConfigValueListener<Integer> MINIMUMEFFECTWAIT;
     public ConfigHelper.ConfigValueListener<Integer> MAXIMUMEFFECTWAIT;
     public ConfigHelper.ConfigValueListener<Integer> BOONSTRENGTH;
@@ -37,6 +39,8 @@ public class ServerConfig {
         this.MISCHAUNTCHANCE = subscriber.subscribe(builder.comment("The percentage increase in haunt chance a player experiences when they kill anything outside of the other categories.").defineInRange("miscHauntChance", 1.0, 0, 100));
         this.MEDIUMEFFECT = subscriber.subscribe(builder.comment("Enables or disables medium strength events (blindness, slowness, weakness) (replaces with weak sound events)").define("mediumStrengthEvents", true));
         this.STRONGEFFECT = subscriber.subscribe(builder.comment("Enables or disables strong strength events (levitation, hunger, nausea) (replaces with weak sound events)").define("strongStrengthEvents", true));
+        this.PHYSEFFECT = subscriber.subscribe(builder.comment("Allows ghost actions to effect the nearby surroundings of players. Disabling may improve performance, but will also reduce how spooky the ghost can be.").define("physicalEvents", true));
+        this.PHYSEFFECTRADIUS = subscriber.subscribe(builder.comment("The radius of which a ghost will look for physical items to interact with. Larger numbers are more resource heavy, and make the ghost stronger. Only matter if physicalEvents is set to true.").defineInRange("physicalEventScans", 5, 3, 16));
         this.MINIMUMEFFECTWAIT = subscriber.subscribe(builder.comment("The minimum wait time between ghost events in ticks").defineInRange("minimumEventWait", 400, 100, Integer.MAX_VALUE));
         this.MAXIMUMEFFECTWAIT = subscriber.subscribe(builder.comment("The maximum wait time between ghost events in ticks").defineInRange("maximumEventWait", 700, 100, Integer.MAX_VALUE));
         this.BOONSTRENGTH = subscriber.subscribe(builder.comment("Increase the potency of boons additively").defineInRange("boonstrength", 0, 0, 100));

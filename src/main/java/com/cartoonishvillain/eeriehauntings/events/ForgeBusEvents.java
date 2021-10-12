@@ -16,6 +16,7 @@ import com.cartoonishvillain.eeriehauntings.networking.strongsoundpackets.Strong
 import com.cartoonishvillain.eeriehauntings.networking.strongsoundpackets.StrongClientSoundPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -23,6 +24,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -36,6 +38,10 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.ButtonBlock;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.LeverBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -124,12 +130,12 @@ public class ForgeBusEvents {
                             if (chance <= 5) {
                                 lightEffect((ServerPlayer) event.player);
                             } else if (chance <= 7) {
-                                moderateEffect((ServerPlayer) event.player);
+                                moderateEffect((ServerPlayer) event.player, true);
                             } else if (chance <= 8) {
                                 lightEffect((ServerPlayer) event.player);
-                                moderateEffect((ServerPlayer) event.player);
+                                moderateEffect((ServerPlayer) event.player, true);
                             } else {
-                                strongEffect((ServerPlayer) event.player);
+                                strongEffect((ServerPlayer) event.player, true);
                             }
 
                         }
@@ -140,12 +146,12 @@ public class ForgeBusEvents {
                             if (chance <= 2) {
                                 lightEffect((ServerPlayer) event.player);
                             } else if (chance <= 5) {
-                                moderateEffect((ServerPlayer) event.player);
+                                moderateEffect((ServerPlayer) event.player, true);
                             } else if (chance <= 7) {
                                 lightEffect((ServerPlayer) event.player);
-                                moderateEffect((ServerPlayer) event.player);
+                                moderateEffect((ServerPlayer) event.player, true);
                             } else {
-                                strongEffect((ServerPlayer) event.player);
+                                strongEffect((ServerPlayer) event.player, true);
                             }
                         }
                     }
@@ -292,9 +298,11 @@ public class ForgeBusEvents {
         LightClientSoundMessenger.sendTo(new LightClientSoundPacket(player.getId(), soundID), player);
     }
 
-    private static void moderateEffect(ServerPlayer player){
+    private static void moderateEffect(ServerPlayer player, boolean notRecycled){
         if(EerieHauntings.serverConfig.MEDIUMEFFECT.get()) {
-            int random = player.getRandom().nextInt(3);
+            int random;
+            if(EerieHauntings.serverConfig.PHYSEFFECT.get() && notRecycled) random = player.getRandom().nextInt(5);
+            else random = player.getRandom().nextInt(3);
             switch (random) {
                 case 0 -> {
                     player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 350, 0));
@@ -308,14 +316,30 @@ public class ForgeBusEvents {
                     player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 350, 0));
 //                player.displayClientMessage(new TranslatableComponent("ghost.moderateweakness.alert"), false);
                 }
+                case 3 -> {
+                    if (!leverWork(player)) {
+                        moderateEffect(player, false);
+                        return;
+                    }
+                    break;
+                }
+                case 4 -> {
+                    if (!buttonWork(player)) {
+                        moderateEffect(player, false);
+                        return;
+                    }
+                    break;
+                }
             }
             MediumClientSoundMessenger.sendTo(new MediumClientSoundPacket(player.getId()), player);
         }else {lightEffect(player);}
     }
 
-    private static void strongEffect(ServerPlayer player){
+    private static void strongEffect(ServerPlayer player, boolean notRecycled){
         if(EerieHauntings.serverConfig.STRONGEFFECT.get()) {
-            int random = player.getRandom().nextInt(3);
+            int random;
+            if (EerieHauntings.serverConfig.PHYSEFFECT.get() && notRecycled) random = player.getRandom().nextInt(4);
+            else random = player.getRandom().nextInt(3);
             switch (random) {
                 case 0 -> {
                     player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 200, 0));
@@ -338,6 +362,13 @@ public class ForgeBusEvents {
                         ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(player.getId(), 200, 2), player);
                     });
 //                player.displayClientMessage(new TranslatableComponent("ghost.stronghunger.alert"), false);
+                }
+                case 3 -> {
+                    if(!doorWork(player)){
+                        strongEffect(player, false);
+                        return;
+                    }
+                    break;
                 }
             }
             StrongClientSoundMessenger.sendTo(new StrongClientSoundPacket(player.getId()), player);
@@ -399,6 +430,62 @@ public class ForgeBusEvents {
                 }
             } else player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.disabled").withStyle(ChatFormatting.DARK_RED), false);
         });
+    }
+
+
+    private static boolean doorWork(Player player){
+        boolean open = player.getRandom().nextBoolean();
+        boolean worked = false;
+        int range = EerieHauntings.serverConfig.PHYSEFFECTRADIUS.get();
+        for(int i = (int) (player.getX() - range); i < player.getX()+range; i++){
+            for(int j = (int) (player.getY() - range); j < player.getY()+range; j++){
+                for(int k = (int) player.getZ() - range; k < player.getZ()+range; k++){
+                    BlockPos blockPos = new BlockPos(i, j, k);
+                    BlockState blockState = player.level.getBlockState(blockPos);
+                    if (blockState.getBlock() instanceof DoorBlock && blockState.is(BlockTags.WOODEN_DOORS)) {
+                        ((DoorBlock) blockState.getBlock()).setOpen(null, player.level, blockState, blockPos, open); worked = true;}
+                }
+            }
+        }
+
+        return worked;
+    }
+
+
+    private static boolean leverWork(Player player){
+        boolean worked = false;
+        int range = EerieHauntings.serverConfig.PHYSEFFECTRADIUS.get();
+        for(int i = (int) (player.getX() - range); i < player.getX()+range; i++){
+            for(int j = (int) (player.getY() - range); j < player.getY()+range; j++){
+                for(int k = (int) player.getZ() - range; k < player.getZ()+range; k++){
+                    BlockPos blockPos = new BlockPos(i, j, k);
+                    BlockState blockState = player.level.getBlockState(blockPos);
+                    if (blockState.getBlock() instanceof LeverBlock) {
+                        ((LeverBlock) blockState.getBlock()).pull(blockState, player.level, blockPos);
+                        worked = true;
+                    }
+                }
+            }
+        }
+        return worked;
+    }
+
+    private static boolean buttonWork(Player player){
+        boolean worked = false;
+        int range = EerieHauntings.serverConfig.PHYSEFFECTRADIUS.get();
+        for(int i = (int) (player.getX() - range); i < player.getX()+range; i++){
+            for(int j = (int) (player.getY() - range); j < player.getY()+range; j++){
+                for(int k = (int) player.getZ() - range; k < player.getZ()+range; k++){
+                    BlockPos blockPos = new BlockPos(i, j, k);
+                    BlockState blockState = player.level.getBlockState(blockPos);
+                    if (blockState.getBlock() instanceof ButtonBlock) {
+                        ((ButtonBlock) blockState.getBlock()).press(blockState, player.level, blockPos);
+                        worked = true;
+                    }
+                }
+            }
+        }
+        return worked;
     }
 
     private static void broadcast(MinecraftServer server, Component translationTextComponent){
