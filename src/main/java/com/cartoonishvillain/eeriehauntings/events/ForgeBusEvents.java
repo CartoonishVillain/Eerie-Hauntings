@@ -71,6 +71,7 @@ public class ForgeBusEvents {
         RemoveHauntCommand.register(event.getDispatcher());
         ToggleAngerCommand.register(event.getDispatcher());
         SetHauntChance.register(event.getDispatcher());
+        SetProtectionDays.register(event.getDispatcher());
     }
 
     @SubscribeEvent
