@@ -6,6 +6,7 @@ import com.cartoonishvillain.eeriehauntings.capabilities.playercapability.Player
 import com.cartoonishvillain.eeriehauntings.capabilities.playercapability.PlayerCapabilityManager;
 import com.cartoonishvillain.eeriehauntings.capabilities.worldcapability.WorldCapability;
 import com.cartoonishvillain.eeriehauntings.capabilities.worldcapability.WorldCapabilityManager;
+import com.cartoonishvillain.eeriehauntings.commands.*;
 import com.cartoonishvillain.eeriehauntings.networking.lightsoundpackets.LightClientSoundMessenger;
 import com.cartoonishvillain.eeriehauntings.networking.lightsoundpackets.LightClientSoundPacket;
 import com.cartoonishvillain.eeriehauntings.networking.mediumsoundpackets.MediumClientSoundMessenger;
@@ -43,6 +44,7 @@ import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -60,6 +62,17 @@ import java.util.concurrent.atomic.AtomicReference;
 @Mod.EventBusSubscriber(modid = EerieHauntings.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 
 public class ForgeBusEvents {
+
+
+    @SubscribeEvent
+    public static void serverLoad(RegisterCommandsEvent event){
+        CommandRegister.register(event.getDispatcher());
+        ForceHauntCommand.register(event.getDispatcher());
+        RemoveHauntCommand.register(event.getDispatcher());
+        ToggleAngerCommand.register(event.getDispatcher());
+        SetHauntChance.register(event.getDispatcher());
+        SetProtectionDays.register(event.getDispatcher());
+    }
 
 
     @SubscribeEvent

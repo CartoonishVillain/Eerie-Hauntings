@@ -41,5 +41,17 @@
   "boon.eeriehauntings.life": "As the offering burns, the spirit leaves you with the boon of life",
   "boon.eeriehauntings.strength":"As the offering burns, the spirit leaves you with the boon of strength",
   "boon.eeriehauntings.disabled": "As the offering burns, the spirit attempts to leave you with a boon, but is too weak to do so.",
-  "info.eeriehauntings.offeringdisabled": "Burn this offering in your main hand with a flint and steel to dispel a non-angry spirit instantly, the boons they would normally give you however are disabled."
+  "info.eeriehauntings.offeringdisabled": "Burn this offering in your main hand with a flint and steel to dispel a non-angry spirit instantly, the boons they would normally give you however are disabled.",
+  "remove.eeriehauntings.success": "Successfully removed lingering spirits from the target.",
+  "protected.eeriehauntings.success": "Successfully applied %1$s day(s) of otherworldly protection to the target.",
+  "protected.eeriehauntings.removed": "Successfully removed any otherworldly protections from the target.",
+  "hauntchance.eeriehauntings.success": "Successfully set target haunt chance to %1$s percent.",
+  "anger.eeriehauntings.toggled": "Successfully toggled the spirit's anger on the target",
+  "haunted.eeriehauntings.success": "Successfully forced an angry spirit's hand into haunting the target.",
+  "help.eeriehauntings.help": "*/eeriehauntings help - This command",
+  "help.eeriehauntings.forcehaunt": "*/forcehaunt <Player> - Forcibly haunts a player if they aren't already haunted.",
+  "help.eeriehauntings.removehaunt": "*/removehaunt <Player> - Forcibly exorcises the ghost off of the selected player.",
+  "help.eeriehauntings.anger": "*/toggleanger <Player> - Toggles if a spirit is angry at the player or not",
+  "help.eeriehauntings.setchance": "*/sethauntchance <Player> <0-100> - Sets the likelihood a player may be haunted when it becomes night",
+  "help.eeriehauntings.protect": "*/setprotectiondays <Player> <0-32 bit Integer Limit> - Sets the amount of days a player is immune to hunting"
 }
