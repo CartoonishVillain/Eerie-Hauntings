@@ -7,10 +7,10 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:amethyst_shard"
+      "item": "minecraft:diamond"
     },
     "C": {
-      "item": "minecraft:calcite"
+      "item": "minecraft:diorite"
     },
     "E": {
       "item": "eeriehauntings:unearthly_shard"
