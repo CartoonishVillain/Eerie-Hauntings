@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#E#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:snowball"
+    },
+    "E": {
+      "item": "eeriehauntings:unearthly_shard"
+    }
+  },
+  "result": {
+    "item": "eeriehauntings:soulball",
+    "count": 8
+  }
+}
