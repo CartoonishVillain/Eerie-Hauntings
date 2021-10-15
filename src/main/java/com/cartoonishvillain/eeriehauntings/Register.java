@@ -1,10 +1,10 @@
 package com.cartoonishvillain.eeriehauntings;
 
-import com.cartoonishvillain.eeriehauntings.items.CalciteChalk;
-import com.cartoonishvillain.eeriehauntings.items.Materials;
-import com.cartoonishvillain.eeriehauntings.items.Offering;
-import com.cartoonishvillain.eeriehauntings.items.UnearthlyDagger;
+import com.cartoonishvillain.eeriehauntings.entities.projectiles.SoulBallProjectile;
+import com.cartoonishvillain.eeriehauntings.items.*;
 import com.cartoonishvillain.eeriehauntings.items.ghosthuntingitems.*;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
@@ -15,12 +15,14 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class Register {
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, EerieHauntings.MODID);
     public static final DeferredRegister<SoundEvent> SOUND_EVENT = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, EerieHauntings.MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, EerieHauntings.MODID);
 
     public static void init(){
         SOUND_EVENT.register(FMLJavaModLoadingContext.get().getModEventBus());
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     public static final RegistryObject<SoundEvent> MEDIUMSTRENGTHSOUNDS = SOUND_EVENT.register("medium_sounds", () -> new SoundEvent(new ResourceLocation(EerieHauntings.MODID, "medium_sounds")));
@@ -41,6 +43,11 @@ public class Register {
 
 
     public static final RegistryObject<Item> UNEARTHLYDAGGER = ITEMS.register("unearthly_dagger", () -> new UnearthlyDagger(Materials.UNEARTHLY, 3, -1.5f, new Item.Properties().tab(ItemGroup.TAB_COMBAT)));
+    public static final RegistryObject<Item> SOULBALL = ITEMS.register("soulball", () -> new SoulBall(new Item.Properties().tab(ItemGroup.TAB_MISC)));
+
+    public static final RegistryObject<EntityType<SoulBallProjectile>> SOULBALLPROJECTILE = ENTITY_TYPES.register("soulballprojectile", () -> EntityType.Builder.<SoulBallProjectile>of(SoulBallProjectile::new, EntityClassification.MISC).sized(0.25f, 0.25f).updateInterval(10).build(new ResourceLocation(EerieHauntings.MODID, "soulballprojectile").toString()));
+
+
 
 
 

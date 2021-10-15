@@ -27,6 +27,7 @@ public class ServerConfig {
     public ConfigHelper.ConfigValueListener<Integer> CHALKDURATION;
     public ConfigHelper.ConfigValueListener<Boolean> ANGERGHOST;
     public ConfigHelper.ConfigValueListener<Boolean> BOON;
+    public ConfigHelper.ConfigValueListener<Double> SOULBALLCHANCEADD;
 
 
     public ServerConfig(ForgeConfigSpec.Builder builder, ConfigHelper.Subscriber subscriber){
@@ -51,6 +52,7 @@ public class ServerConfig {
         this.ANGERGHOST = subscriber.subscribe(builder.comment("Enables or Disables ghosts getting angry when the wrong exorcism type is used, ramping up more harsh effects until the next day.").define("anger", true));
         this.BOON = subscriber.subscribe(builder.comment("Enables or disables boons, a system where a ghost can provide a buff for an hour when an offering is burnt.").define("boon", true));
         this.CHALKDURATION = subscriber.subscribe(builder.comment("How many ingame days are players safe after they successfully use chalk.").defineInRange("chalkDuration", 10, 1, 60));
+        this.SOULBALLCHANCEADD = subscriber.subscribe(builder.comment("How much of an increase to a player's haunting chance is being hit with a soulball").defineInRange("soulBallHauntChance", 5.0, 0, 100));
         builder.pop();
     }
 

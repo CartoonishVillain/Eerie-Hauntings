@@ -28,6 +28,8 @@
   "item.eeriehauntings.unearthly_shard": "Unearthly Shard",
   "item.eeriehauntings.unearthly_gem": "Unearthly Gem",
   "item.eeriehauntings.unearthly_dagger": "Unearthly Dagger",
+  "item.eeriehauntings.soulball": "Soul Ball",
+  "entity.eeriehauntings.soulballprojectile": "Thrown Soul Ball",
   "info.eeriehauntings.calciteexplain": "Powered with ghostly energy, protects the user from hauntings for %1$s day(s) if they are not already haunted.",
   "info.eeriehauntings.offering": "Burn this offering in your main hand with a flint and steel to dispel a non-angry spirit instantly, and receive a boon from them.",
   "info.eeriehauntings.shard": "A small, somewhat physical manifestation of a spirit's power. It can be molded into more powerful forms and items.",
@@ -53,6 +55,8 @@
   "help.eeriehauntings.removehaunt": "*/removehaunt <Player> - Forcibly exorcises the ghost off of the selected player.",
   "help.eeriehauntings.anger": "*/toggleanger <Player> - Toggles if a spirit is angry at the player or not",
   "help.eeriehauntings.setchance": "*/sethauntchance <Player> <0-100> - Sets the likelihood a player may be haunted when it becomes night",
-  "help.eeriehauntings.protect": "*/setprotectiondays <Player> <0-32 bit Integer Limit> - Sets the amount of days a player is immune to hunting"
+  "help.eeriehauntings.protect": "*/setprotectiondays <Player> <0-32 bit Integer Limit> - Sets the amount of days a player is immune to hunting",
+  "soulball.eeriehauntings.info": "Will increase the likelyhood of a player being haunted by %1$s percent when hit.",
+  "soulball.eeriehauntings.info2": "Will weaken a living target when hit."
 
 }
