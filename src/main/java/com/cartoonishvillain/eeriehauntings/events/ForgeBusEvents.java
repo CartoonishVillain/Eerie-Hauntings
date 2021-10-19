@@ -15,6 +15,7 @@ import com.cartoonishvillain.eeriehauntings.networking.shaderupdatepacket.Shader
 import com.cartoonishvillain.eeriehauntings.networking.shaderupdatepacket.ShaderUpdatePacket;
 import com.cartoonishvillain.eeriehauntings.networking.strongsoundpackets.StrongClientSoundMessenger;
 import com.cartoonishvillain.eeriehauntings.networking.strongsoundpackets.StrongClientSoundPacket;
+import io.github.noeppi_noeppi.mods.torment.cap.TormentData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -282,6 +283,10 @@ public class ForgeBusEvents {
             player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
                 //if the player isn't haunted and isn't protected from haunting, attempt to haunt
                 if(!h.getIsHaunted() && h.getProtectedDays() == 0){
+
+                    //if torment is installed and compat is on, run the torment method
+                    if(EerieHauntings.tormentInstalled){tormentModifier(player);}
+
                     //check haunt chance with randomizer
                     if (player.getRandom().nextInt(100) < h.getHauntChance()){
                         //player is haunted! Attatch random ghost type.
@@ -499,6 +504,20 @@ public class ForgeBusEvents {
             }
         }
         return worked;
+    }
+
+    private static void tormentModifier(ServerPlayer player){
+        //gets the torment data of the relevant player
+        TormentData tormentData = TormentData.get(player);
+        player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
+            //For every point of torment I want the multiplier to be increased by 0.05;
+            float multiplier = 0.05f * tormentData.getTormentLevel();
+            //add one so the multiplier increases the haunt chance when applied.
+            multiplier += 1;
+            //multiply haunt chance with the torment multiplier and set the new haunt chance before the check.
+            float multiplied = h.getHauntChance() * multiplier;
+            h.setHauntChance(multiplied);
+        });
     }
 
     private static void broadcast(MinecraftServer server, Component translationTextComponent){

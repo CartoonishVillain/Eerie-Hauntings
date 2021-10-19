@@ -10,6 +10,7 @@ import com.cartoonishvillain.eeriehauntings.networking.strongsoundpackets.Strong
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -31,6 +32,8 @@ public class EerieHauntings
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
 
+    public static boolean tormentInstalled = false;
+
     public EerieHauntings() {
         serverConfig = ConfigHelper.register(ModConfig.Type.SERVER, ServerConfig::new);
         clientConfig = ConfigHelper.register(ModConfig.Type.CLIENT, ClientConfig::new);
@@ -48,8 +51,8 @@ public class EerieHauntings
 
     private void setup(final FMLCommonSetupEvent event)
     {
-        // some preinit code
-
+        // Check if torment is installed AND compat for it is activated.
+        tormentInstalled = (ModList.get().isLoaded("torment") && serverConfig.TORMENTCOMPAT.get());
     }
 
 }

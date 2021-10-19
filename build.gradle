@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.2.1-1.17.1'
+version = '1.2.2-1.17.1'
 group = 'com.cartoonishvillain.eeriehauntings' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'eeriehauntings'
 
@@ -115,6 +115,15 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+}
+
+repositories {
     // Put repositories for dependencies here
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
 
@@ -129,6 +138,12 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.17.1-37.0.75'
+
+//    implementation fg.deobf("curse.maven:LibX-412525:3478097")
+//    implementation fg.deobf("curse.maven:torment-532846:3491284")
+    compileOnly fg.deobf("curse.maven:torment-532846:3491284")
+    compileOnly fg.deobf("curse.maven:LibX-412525:3478097")
+
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency

@@ -8,6 +8,8 @@ public class ServerConfig {
 
     public static final String CATEGORY_HAUNTS = "Haunting Settings";
     public static final String CATEGORY_MECHANICS = "Haunting Mechanics";
+    public static final String CATEGORY_COMPAT = "Haunting Compatability";
+
 
     public ConfigHelper.ConfigValueListener<Double> NORMALHAUNTCHANCE;
     public ConfigHelper.ConfigValueListener<Double> VILLAGERHAUNTCHANCE;
@@ -28,6 +30,8 @@ public class ServerConfig {
     public ConfigHelper.ConfigValueListener<Boolean> ANGERGHOST;
     public ConfigHelper.ConfigValueListener<Boolean> BOON;
     public ConfigHelper.ConfigValueListener<Double> SOULBALLCHANCEADD;
+
+    public ConfigHelper.ConfigValueListener<Boolean> TORMENTCOMPAT;
 
 
     public ServerConfig(ForgeConfigSpec.Builder builder, ConfigHelper.Subscriber subscriber){
@@ -54,6 +58,9 @@ public class ServerConfig {
         this.CHALKDURATION = subscriber.subscribe(builder.comment("How many ingame days are players safe after they successfully use chalk.").defineInRange("chalkDuration", 10, 1, 60));
         this.SOULBALLCHANCEADD = subscriber.subscribe(builder.comment("How much of an increase to a player's haunting chance is being hit with a soulball").defineInRange("soulBallHauntChance", 5.0, 0, 100));
         builder.pop();
+
+        builder.comment("Modify compatability mod features").push(CATEGORY_COMPAT);
+        this.TORMENTCOMPAT = subscriber.subscribe(builder.comment("Enables or disables compat with Torment, a fellow SpookyJam 2021 mod. Players with higher level of torment get their haunt chances multiplied by 5% per point of torment. This does nothing without the mod installed.").define("eerieTormentCompat", true));
     }
 
 
