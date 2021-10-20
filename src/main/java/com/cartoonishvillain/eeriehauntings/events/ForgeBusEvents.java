@@ -511,7 +511,7 @@ public class ForgeBusEvents {
         TormentData tormentData = TormentData.get(player);
         player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
             //For every point of torment I want the multiplier to be increased by 0.05;
-            float multiplier = 0.05f * tormentData.getTormentLevel();
+            float multiplier = EerieHauntings.commonConfig.TORMENTCOMPATVALUE.get().floatValue() * tormentData.getTormentLevel();
             //add one so the multiplier increases the haunt chance when applied.
             multiplier += 1;
             //multiply haunt chance with the torment multiplier and set the new haunt chance before the check.
