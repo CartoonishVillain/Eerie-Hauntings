@@ -37,13 +37,11 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ChatType;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
@@ -393,20 +391,24 @@ public class ForgeBusEvents {
     //Ghost removal w/o making the ghost angry (or letting it calm down first)
     public static void exorciseGhost(ServerPlayerEntity player){
         player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
-            h.setHaunted(false);
-            h.setGhostType(0);
-            ItemEntity item = new ItemEntity(EntityType.ITEM, player.level);
-            item.setItem(new ItemStack(Register.UNEARTHLYSHARD.get()));
-            item.setPos(player.getX(), player.getY(), player.getZ());
-            player.level.addFreshEntity(item);
+            if (!MinecraftForge.EVENT_BUS.post(new GhostExorcisedEvent(player, h.getGhostType(), false))) {
+                h.setHaunted(false);
+                h.setGhostType(0);
+                ItemEntity item = new ItemEntity(EntityType.ITEM, player.level);
+                item.setItem(new ItemStack(Register.UNEARTHLYSHARD.get()));
+                item.setPos(player.getX(), player.getY(), player.getZ());
+                player.level.addFreshEntity(item);
+            }
         });
     }
 
     //Ghost removal while angry. Doesn't drop an unearthlyShard
     public static void expellGhost(ServerPlayerEntity player){
         player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
-            h.setHaunted(false);
-            h.setGhostType(0);
+            if (!MinecraftForge.EVENT_BUS.post(new GhostExorcisedEvent(player, h.getGhostType(), true))) {
+                h.setHaunted(false);
+                h.setGhostType(0);
+            }
         });
     }
 
