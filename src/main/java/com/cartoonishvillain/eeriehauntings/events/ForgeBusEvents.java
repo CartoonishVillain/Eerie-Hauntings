@@ -34,7 +34,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.*;
-import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -44,6 +43,7 @@ import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
@@ -396,20 +396,24 @@ public class ForgeBusEvents {
     //Ghost removal w/o making the ghost angry (or letting it calm down first)
     public static void exorciseGhost(ServerPlayer player){
         player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
-            h.setHaunted(false);
-            h.setGhostType(0);
-            ItemEntity item = new ItemEntity(EntityType.ITEM, player.level);
-            item.setItem(new ItemStack(Register.UNEARTHLYSHARD.get()));
-            item.setPos(player.getX(), player.getY(), player.getZ());
-            player.level.addFreshEntity(item);
+            if (!MinecraftForge.EVENT_BUS.post(new GhostExorcisedEvent(player, h.getGhostType(), false))) {
+                h.setHaunted(false);
+                h.setGhostType(0);
+                ItemEntity item = new ItemEntity(EntityType.ITEM, player.level);
+                item.setItem(new ItemStack(Register.UNEARTHLYSHARD.get()));
+                item.setPos(player.getX(), player.getY(), player.getZ());
+                player.level.addFreshEntity(item);
+            }
         });
     }
 
     //Ghost removal while angry. Doesn't drop an unearthlyShard
     public static void expellGhost(ServerPlayer player){
         player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
-            h.setHaunted(false);
-            h.setGhostType(0);
+            if (!MinecraftForge.EVENT_BUS.post(new GhostExorcisedEvent(player, h.getGhostType(), true))) {
+                h.setHaunted(false);
+                h.setGhostType(0);
+            }
         });
     }
 
