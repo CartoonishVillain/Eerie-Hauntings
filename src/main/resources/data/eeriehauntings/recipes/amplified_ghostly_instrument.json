@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "eeriehauntings:ghostly_instrument"
+    },
+    {
+      "item": "eeriehauntings:unearthly_shard"
+    }
+  ],
+  "result": {
+    "item": "eeriehauntings:amplified_ghostly_instrument",
+    "count": 1
+  }
+}
