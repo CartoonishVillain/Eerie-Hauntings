@@ -3,6 +3,10 @@ package com.cartoonishvillain.eeriehauntings;
 import com.cartoonishvillain.eeriehauntings.entities.projectiles.SoulBallProjectile;
 import com.cartoonishvillain.eeriehauntings.items.*;
 import com.cartoonishvillain.eeriehauntings.items.ghosthuntingitems.*;
+import com.cartoonishvillain.eeriehauntings.items.rewarditems.CalciteChalk;
+import com.cartoonishvillain.eeriehauntings.items.rewarditems.GhostlyInstrument;
+import com.cartoonishvillain.eeriehauntings.items.rewarditems.SoulBall;
+import com.cartoonishvillain.eeriehauntings.items.rewarditems.UnearthlyDagger;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
@@ -38,8 +42,13 @@ public class Register {
     public static final RegistryObject<Item> INCENSESTICK = ITEMS.register("incense_stick", () -> new IncenseStick(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
     public static final RegistryObject<Item> PURIFIEDWATER = ITEMS.register("purified_water", () -> new PurifiedWater(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
     public static final RegistryObject<Item> REDSTONEDREAMCATCHER = ITEMS.register("redstone_dream_catcher", () -> new RedstoneDreamCatcher(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
+
+
     public static final RegistryObject<Item> CALCITECHALK = ITEMS.register("calcite_chalk", () -> new CalciteChalk(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
     public static final RegistryObject<Item> UNEARTHLYOFFERING = ITEMS.register("unearthly_offering", () -> new Offering(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
+    public static final RegistryObject<Item> GHOSTLYINSTRUMENT = ITEMS.register("ghostly_instrument", () -> new GhostlyInstrument(new Item.Properties().durability(128).tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> AMPLIFIEDGHOSTLYINSTRUMENT = ITEMS.register("amplified_ghostly_instrument", () -> new GhostlyInstrument(new Item.Properties().durability(128).tab(CreativeModeTab.TAB_MISC)));
+
 
 
     public static final RegistryObject<Item> UNEARTHLYDAGGER = ITEMS.register("unearthly_dagger", () -> new UnearthlyDagger(Materials.UNEARTHLY, 3, -1.5f, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));

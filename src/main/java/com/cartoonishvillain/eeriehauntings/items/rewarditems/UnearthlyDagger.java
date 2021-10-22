@@ -1,4 +1,4 @@
-package com.cartoonishvillain.eeriehauntings.items;
+package com.cartoonishvillain.eeriehauntings.items.rewarditems;
 
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;

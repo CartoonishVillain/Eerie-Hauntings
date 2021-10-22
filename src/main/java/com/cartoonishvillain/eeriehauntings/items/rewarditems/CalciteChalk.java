@@ -1,4 +1,4 @@
-package com.cartoonishvillain.eeriehauntings.items;
+package com.cartoonishvillain.eeriehauntings.items.rewarditems;
 
 import com.cartoonishvillain.eeriehauntings.EerieHauntings;
 import com.cartoonishvillain.eeriehauntings.capabilities.playercapability.PlayerCapability;
