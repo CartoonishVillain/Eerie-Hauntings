@@ -1,4 +1,4 @@
-package com.cartoonishvillain.eeriehauntings.items;
+package com.cartoonishvillain.eeriehauntings.items.rewarditems;
 
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.SwordItem;

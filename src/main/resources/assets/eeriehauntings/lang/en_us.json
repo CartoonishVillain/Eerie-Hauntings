@@ -29,6 +29,8 @@
   "item.eeriehauntings.unearthly_gem": "Unearthly Gem",
   "item.eeriehauntings.unearthly_dagger": "Unearthly Dagger",
   "item.eeriehauntings.soulball": "Soul Ball",
+  "item.eeriehauntings.amplified_ghostly_instrument": "Amplified Eerie Instrument",
+  "item.eeriehauntings.ghostly_instrument": "Eerie Instrument",
   "entity.eeriehauntings.soulballprojectile": "Thrown Soul Ball",
   "info.eeriehauntings.calciteexplain": "Powered with ghostly energy, protects the user from hauntings for %1$s day(s) if they are not already haunted.",
   "info.eeriehauntings.offering": "Burn this offering in your main hand with a flint and steel to dispel a non-angry spirit instantly, and receive a boon from them.",
@@ -57,6 +59,9 @@
   "help.eeriehauntings.setchance": "*/sethauntchance <Player> <0-100> - Sets the likelihood a player may be haunted when it becomes night",
   "help.eeriehauntings.protect": "*/setprotectiondays <Player> <0-32 bit Integer Limit> - Sets the amount of days a player is immune to hunting",
   "soulball.eeriehauntings.info": "Will increase the likelyhood of a player being haunted by %1$s percent when hit.",
-  "soulball.eeriehauntings.info2": "Will weaken a living target when hit."
+  "soulball.eeriehauntings.info2": "Will weaken a living target when hit.",
+  "amplifiedinstrument.eeriehauntings.infosound": "Plays a random spirit laugh or groan nearby for all players.",
+  "amplifiedinstrument.eeriehauntings.infocrouch": "Crouch while using to blind all nearby players for a short time. Takes 2 extra durability per player.",
+  "instrument.eeriehauntings.infosound": "Plays a random unsettling noise a spirit may make nearby for all players."
 
 }
