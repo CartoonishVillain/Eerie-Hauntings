@@ -362,7 +362,12 @@ public class ForgeBusEvents {
 //                player.displayClientMessage(new TranslationTextComponent()("ghost.stronglevitate.alert"), false);
                 }
                 case 1: {
-                    player.addEffect(new EffectInstance(Effects.CONFUSION, 200, 0));
+                    player.addEffect(new EffectInstance(Effects.CONFUSION, 350, 0));
+                    player.getCapability(PlayerCapability.INSTANCE).ifPresent(h -> {
+                        h.setEffectID(3);
+                        h.setVisualEffectTime(350);
+                        ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(player.getId(), 200, 3), player);
+                    });
 //                player.displayClientMessage(new TranslationTextComponent()("ghost.strongconfusion.alert"), false);
                     break;
                 }

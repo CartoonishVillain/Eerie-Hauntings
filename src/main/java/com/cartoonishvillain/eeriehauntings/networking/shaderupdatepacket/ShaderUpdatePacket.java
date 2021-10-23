@@ -64,6 +64,7 @@ public class ShaderUpdatePacket {
             default: {return null;}
             case 1: {return new ResourceLocation("shaders/post/flip.json");}
             case 2: {return new ResourceLocation("shaders/post/blobs.json");}
+            case 3: {return new ResourceLocation("shaders/post/desaturate.json");}
         }
     }
 
