@@ -35,6 +35,8 @@ public class EerieHauntings
     private static final Logger LOGGER = LogManager.getLogger();
 
     public static boolean tormentInstalled = false;
+    public static boolean spookyBiomesInstalled = false;
+
 
     public EerieHauntings() {
         serverConfig = ConfigHelper.register(ModConfig.Type.SERVER, ServerConfig::new);
@@ -56,6 +58,7 @@ public class EerieHauntings
     {
         // Check if torment is installed AND compat for it is activated.
         tormentInstalled = (ModList.get().isLoaded("torment") && commonConfig.TORMENTCOMPAT.get());
+        spookyBiomesInstalled = (ModList.get().isLoaded("spookybiomes") && commonConfig.SPOOKYCOMPAT.get());
     }
 
 }

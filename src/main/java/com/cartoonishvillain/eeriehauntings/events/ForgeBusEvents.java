@@ -135,8 +135,10 @@ public class ForgeBusEvents {
             event.player.getCapability(PlayerCapability.INSTANCE).ifPresent(h -> {
 
                 if(ValidPlayer(event.player)) {
+                    boolean spookyForest = false;
+                    if(EerieHauntings.spookyBiomesInstalled && playerInSpookyForest(event.player)) {spookyForest = true;}
                     if (h.getIsHaunted() && h.checkHauntActionTicks()) {
-                        if (event.player.level.isDay()) {
+                        if (event.player.level.isDay() && !spookyForest) {
                             lightEffect((ServerPlayer) event.player);
                         } else {
                             if (!h.getAnger()) {
@@ -286,6 +288,8 @@ public class ForgeBusEvents {
 
                     //if torment is installed and compat is on, run the torment method
                     if(EerieHauntings.tormentInstalled){tormentModifier(player);}
+
+                    if(EerieHauntings.spookyBiomesInstalled && playerInSpookyForest(player)){ghostlyBiomeModifier(player);}
 
                     //check haunt chance with randomizer
                     if (player.getRandom().nextInt(100) < h.getHauntChance()){
@@ -535,5 +539,17 @@ public class ForgeBusEvents {
 
     private static boolean ValidPlayer(Player player){
         return !player.isCreative() && !player.isSpectator();
+    }
+
+    private static boolean playerInSpookyForest(Player player){
+        return player.level.getBiome(player.getOnPos()).getRegistryName().toString().equals("spookybiomes:ghostly_forest");
+    }
+
+    private static void ghostlyBiomeModifier(ServerPlayer player){
+        player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
+            float multiplier = EerieHauntings.commonConfig.SPOOKYCOMPATVALUE.get().floatValue();
+            float multiplied = h.getHauntChance() * multiplier;
+            h.setHauntChance(multiplied);
+        });
     }
 }
