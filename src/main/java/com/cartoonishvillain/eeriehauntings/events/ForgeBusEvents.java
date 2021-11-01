@@ -64,7 +64,7 @@ public class ForgeBusEvents {
 
     @SubscribeEvent
     public static void serverLoad(RegisterCommandsEvent event){
-        CommandRegister.register(event.getDispatcher());
+        HelpCommand.register(event.getDispatcher());
         ForceHauntCommand.register(event.getDispatcher());
         RemoveHauntCommand.register(event.getDispatcher());
         ToggleAngerCommand.register(event.getDispatcher());
@@ -428,32 +428,32 @@ public class ForgeBusEvents {
                 int rand = player.getRandom().nextInt(6);
                 switch (rand) {
                     case 0: {
-                        player.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
+                        player.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, Integer.MAX_VALUE, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
                         player.displayClientMessage(new TranslationTextComponent("boon.eeriehauntings.speed").withStyle(TextFormatting.AQUA), false);
                         break;
                     }
                     case 1: {
-                        player.addEffect(new EffectInstance(Effects.DIG_SPEED, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
+                        player.addEffect(new EffectInstance(Effects.DIG_SPEED, Integer.MAX_VALUE, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
                         player.displayClientMessage(new TranslationTextComponent("boon.eeriehauntings.haste").withStyle(TextFormatting.YELLOW), false);
                         break;
                     }
                     case 2: {
-                        player.addEffect(new EffectInstance(Effects.JUMP, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
+                        player.addEffect(new EffectInstance(Effects.JUMP, Integer.MAX_VALUE, 1 + EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
                         player.displayClientMessage(new TranslationTextComponent("boon.eeriehauntings.jump").withStyle(TextFormatting.GREEN), false);
                         break;
                     }
                     case 3: {
-                        player.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
+                        player.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, Integer.MAX_VALUE, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
                         player.displayClientMessage(new TranslationTextComponent("boon.eeriehauntings.resistance").withStyle(TextFormatting.RED), false);
                         break;
                     }
                     case 4: {
-                        player.addEffect(new EffectInstance(Effects.HEALTH_BOOST, 72000, 1 + EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
+                        player.addEffect(new EffectInstance(Effects.HEALTH_BOOST, Integer.MAX_VALUE, 1 + EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
                         player.displayClientMessage(new TranslationTextComponent("boon.eeriehauntings.life").withStyle(TextFormatting.LIGHT_PURPLE), false);
                         break;
                     }
                     case 5: {
-                        player.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 72000, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
+                        player.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
                         player.displayClientMessage(new TranslationTextComponent("boon.eeriehauntings.strength").withStyle(TextFormatting.DARK_RED), false);
                         break;
                     }

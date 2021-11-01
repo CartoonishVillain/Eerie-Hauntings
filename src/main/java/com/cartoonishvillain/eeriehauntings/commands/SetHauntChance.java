@@ -15,11 +15,11 @@ import java.util.Collection;
 public class SetHauntChance {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher){
-        dispatcher.register(Commands.literal("sethauntchance")
+        dispatcher.register(Commands.literal("eeriehauntings").then(Commands.literal("sethauntchance")
                 .requires(cs -> {return cs.hasPermission(2);})
                 .then(Commands.argument("target", GameProfileArgument.gameProfile()).then(Commands.argument("chance", FloatArgumentType.floatArg(0, 100)).executes(context -> {
                     return setHauntChance(context.getSource(), GameProfileArgument.getGameProfiles(context, "target"), FloatArgumentType.getFloat(context, "chance"));
-                })))
+                }))))
 
         );
     }

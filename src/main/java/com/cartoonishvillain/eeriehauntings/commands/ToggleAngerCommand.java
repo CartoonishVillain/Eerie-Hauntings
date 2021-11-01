@@ -14,11 +14,11 @@ import java.util.Collection;
 public class ToggleAngerCommand {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher){
-        dispatcher.register(Commands.literal("toggleanger")
+        dispatcher.register(Commands.literal("eeriehauntings").then(Commands.literal("toggleanger")
                 .requires(cs -> {return cs.hasPermission(2);})
                 .then(Commands.argument("target", GameProfileArgument.gameProfile()).executes(context -> {
                     return toggleAnger(context.getSource(), GameProfileArgument.getGameProfiles(context, "target"));
-                })
+                }))
         ));
     }
 
