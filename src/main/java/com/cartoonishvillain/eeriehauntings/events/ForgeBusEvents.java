@@ -114,7 +114,7 @@ public class ForgeBusEvents {
             event.player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
                 if(h.getVisualEffectTime() > 0){
                     h.setVisualEffectTime(h.getVisualEffectTime() - 1);
-                    if(h.getVisualEffectTime() == 0 && event.player.level.isClientSide()) {
+                    if((h.getVisualEffectTime() == 0 || !ValidPlayer(event.player)) && event.player.level.isClientSide()) {
                         //if the ticker reaches 0, remove the effect.
                         Minecraft.getInstance().gameRenderer.shutdownEffect();
                         h.setEffectID(0);
@@ -130,56 +130,58 @@ public class ForgeBusEvents {
         if (!event.player.level.isClientSide() && event.phase.equals(TickEvent.Phase.END)) {
             event.player.getCapability(PlayerCapability.INSTANCE).ifPresent(h -> {
 
-                if (h.getIsHaunted() && h.checkHauntActionTicks()) {
-                    if (event.player.level.isDay()) {
-                        lightEffect((ServerPlayerEntity) event.player);
+                if(ValidPlayer(event.player)) {
+                    if (h.getIsHaunted() && h.checkHauntActionTicks()) {
+                        if (event.player.level.isDay()) {
+                            lightEffect((ServerPlayerEntity) event.player);
 
-                    } else {
-                        if (!h.getAnger()) {
-                            int chance = event.player.getRandom().nextInt(10);
-                            if (chance <= 5) {
-                                lightEffect((ServerPlayerEntity) event.player);
-                            } else if (chance <= 7) {
-                                moderateEffect((ServerPlayerEntity) event.player, true);
-                            } else if (chance <= 8) {
-                                lightEffect((ServerPlayerEntity) event.player);
-                                moderateEffect((ServerPlayerEntity) event.player, true);
-                            } else {
-                                strongEffect((ServerPlayerEntity) event.player, true);
+                        } else {
+                            if (!h.getAnger()) {
+                                int chance = event.player.getRandom().nextInt(10);
+                                if (chance <= 5) {
+                                    lightEffect((ServerPlayerEntity) event.player);
+                                } else if (chance <= 7) {
+                                    moderateEffect((ServerPlayerEntity) event.player, true);
+                                } else if (chance <= 8) {
+                                    lightEffect((ServerPlayerEntity) event.player);
+                                    moderateEffect((ServerPlayerEntity) event.player, true);
+                                } else {
+                                    strongEffect((ServerPlayerEntity) event.player, true);
+                                }
+
                             }
 
-                        }
-
-                        //If angered, it'll lean towards stronger events.
-                        else {
-                            int chance = event.player.getRandom().nextInt(10);
-                            if (chance <= 2) {
-                                lightEffect((ServerPlayerEntity) event.player);
-                            } else if (chance <= 5) {
-                                moderateEffect((ServerPlayerEntity) event.player, true);
-                            } else if (chance <= 7) {
-                                lightEffect((ServerPlayerEntity) event.player);
-                                moderateEffect((ServerPlayerEntity) event.player, true);
-                            } else {
-                                strongEffect((ServerPlayerEntity) event.player, true);
+                            //If angered, it'll lean towards stronger events.
+                            else {
+                                int chance = event.player.getRandom().nextInt(10);
+                                if (chance <= 2) {
+                                    lightEffect((ServerPlayerEntity) event.player);
+                                } else if (chance <= 5) {
+                                    moderateEffect((ServerPlayerEntity) event.player, true);
+                                } else if (chance <= 7) {
+                                    lightEffect((ServerPlayerEntity) event.player);
+                                    moderateEffect((ServerPlayerEntity) event.player, true);
+                                } else {
+                                    strongEffect((ServerPlayerEntity) event.player, true);
+                                }
                             }
                         }
-                    }
-                    h.setHauntActionTicks(event.player.getRandom().nextInt(EerieHauntings.serverConfig.MAXIMUMEFFECTWAIT.get() - EerieHauntings.serverConfig.MINIMUMEFFECTWAIT.get()) + EerieHauntings.serverConfig.MINIMUMEFFECTWAIT.get());
+                        h.setHauntActionTicks(event.player.getRandom().nextInt(EerieHauntings.serverConfig.MAXIMUMEFFECTWAIT.get() - EerieHauntings.serverConfig.MINIMUMEFFECTWAIT.get()) + EerieHauntings.serverConfig.MINIMUMEFFECTWAIT.get());
 
-                    if(event.player.getMainHandItem().getItem().equals(Register.OLDRADIO.get()) && h.getGhostType() != 1 && h.getGhostType() != 0){
-                        event.player.getCooldowns().addCooldown(Register.OLDRADIO.get(), 100);
-                        event.player.level.playSound(null, event.player.blockPosition(), Register.RADIOSOUND.get(), SoundCategory.MASTER, 1, 1);
-                        event.player.displayClientMessage(new TranslationTextComponent("item.eeriehauntings.radio").withStyle(TextFormatting.GOLD), true);
-                    }
-                    else if(event.player.getMainHandItem().getItem().equals(Register.EMFCOUNTER.get()) && h.getGhostType() != 2 && h.getGhostType() != 0){
-                        event.player.getCooldowns().addCooldown(Register.EMFCOUNTER.get(), 100);
-                        event.player.level.playSound(null, event.player.blockPosition(), Register.EMFCOUNTERSOUNDS.get(), SoundCategory.MASTER, 1, 1);
-                        event.player.displayClientMessage(new TranslationTextComponent("item.eeriehauntings.emf").withStyle(TextFormatting.GOLD), true);
+                        if (event.player.getMainHandItem().getItem().equals(Register.OLDRADIO.get()) && h.getGhostType() != 1 && h.getGhostType() != 0) {
+                            event.player.getCooldowns().addCooldown(Register.OLDRADIO.get(), 100);
+                            event.player.level.playSound(null, event.player.blockPosition(), Register.RADIOSOUND.get(), SoundCategory.MASTER, 1, 1);
+                            event.player.displayClientMessage(new TranslationTextComponent("item.eeriehauntings.radio").withStyle(TextFormatting.GOLD), true);
+                        } else if (event.player.getMainHandItem().getItem().equals(Register.EMFCOUNTER.get()) && h.getGhostType() != 2 && h.getGhostType() != 0) {
+                            event.player.getCooldowns().addCooldown(Register.EMFCOUNTER.get(), 100);
+                            event.player.level.playSound(null, event.player.blockPosition(), Register.EMFCOUNTERSOUNDS.get(), SoundCategory.MASTER, 1, 1);
+                            event.player.displayClientMessage(new TranslationTextComponent("item.eeriehauntings.emf").withStyle(TextFormatting.GOLD), true);
+                        }
+
                     }
 
+                    if (!h.getIsHaunted()) h.setHauntActionTicks(0);
                 }
-                if(!h.getIsHaunted()) h.setHauntActionTicks(0);
             });
         }
     }
@@ -205,7 +207,7 @@ public class ForgeBusEvents {
 
     @SubscribeEvent
     public static void playerJoinEvent(EntityJoinWorldEvent event){
-        if(!event.getWorld().isClientSide() && event.getEntity() instanceof PlayerEntity){
+        if(!event.getWorld().isClientSide() && event.getEntity() instanceof PlayerEntity && ValidPlayer((PlayerEntity) event.getEntity())){
             event.getEntity().getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
                 if(h.getVisualEffectTime() > 0){
                     ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(event.getEntity().getId(), h.getVisualEffectTime(), h.getEffectID()), (PlayerEntity) event.getEntity());
@@ -517,5 +519,9 @@ public class ForgeBusEvents {
 
     private static void broadcast(MinecraftServer server, TextComponent translationTextComponent){
         server.getPlayerList().broadcastMessage(translationTextComponent, ChatType.CHAT, UUID.randomUUID());
+    }
+
+    private static boolean ValidPlayer(PlayerEntity player){
+        return !player.isCreative() && !player.isSpectator();
     }
 }
