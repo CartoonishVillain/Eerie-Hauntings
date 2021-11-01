@@ -15,11 +15,11 @@ import java.util.Collection;
 public class ForceHauntCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher){
-        dispatcher.register(Commands.literal("forcehaunt")
+        dispatcher.register(Commands.literal("eeriehauntings").then(Commands.literal("forcehaunt")
                 .requires(cs -> {return cs.hasPermission(2);})
                 .then(Commands.argument("target", GameProfileArgument.gameProfile()).executes(context -> {
                     return hauntRandom(context.getSource(), GameProfileArgument.getGameProfiles(context, "target"));
-                }))
+                })))
         );
     }
 

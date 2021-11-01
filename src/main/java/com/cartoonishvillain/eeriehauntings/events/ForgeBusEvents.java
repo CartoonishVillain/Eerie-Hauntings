@@ -67,7 +67,7 @@ public class ForgeBusEvents {
 
     @SubscribeEvent
     public static void serverLoad(RegisterCommandsEvent event){
-        CommandRegister.register(event.getDispatcher());
+        HelpCommand.register(event.getDispatcher());
         ForceHauntCommand.register(event.getDispatcher());
         RemoveHauntCommand.register(event.getDispatcher());
         ToggleAngerCommand.register(event.getDispatcher());
@@ -435,7 +435,7 @@ public class ForgeBusEvents {
                 int rand = player.getRandom().nextInt(6);
                 switch (rand) {
                     case 0 -> {
-                        player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, Integer.MAX_VALUE, 1 + EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
+                        player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, Integer.MAX_VALUE,  EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
                         player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.speed").withStyle(ChatFormatting.AQUA), false);
                     }
                     case 1 -> {
@@ -443,7 +443,7 @@ public class ForgeBusEvents {
                         player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.haste").withStyle(ChatFormatting.YELLOW), false);
                     }
                     case 2 -> {
-                        player.addEffect(new MobEffectInstance(MobEffects.JUMP, Integer.MAX_VALUE, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
+                        player.addEffect(new MobEffectInstance(MobEffects.JUMP, Integer.MAX_VALUE, 1 + EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
                         player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.jump").withStyle(ChatFormatting.GREEN), false);
                     }
                     case 3 -> {

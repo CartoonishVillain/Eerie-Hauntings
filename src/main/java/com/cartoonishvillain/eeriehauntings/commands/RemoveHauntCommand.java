@@ -13,11 +13,11 @@ import java.util.Collection;
 
 public class RemoveHauntCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher){
-        dispatcher.register(Commands.literal("removehaunt")
+        dispatcher.register(Commands.literal("eeriehauntings").then(Commands.literal("removehaunt")
                 .requires(cs -> {return cs.hasPermission(2);})
                 .then(Commands.argument("target", GameProfileArgument.gameProfile()).executes(context -> {
                     return removeHaunt(context.getSource(), GameProfileArgument.getGameProfiles(context, "target"));
-                }))
+                })))
         );
     }
 

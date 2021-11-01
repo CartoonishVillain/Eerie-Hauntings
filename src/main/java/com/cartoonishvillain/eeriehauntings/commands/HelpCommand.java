@@ -9,24 +9,24 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.TranslatableComponent;
 
-public class HelpCommand implements Command<CommandSourceStack> {
-    private static final HelpCommand CMD = new HelpCommand();
-
-    public static ArgumentBuilder<CommandSourceStack, ?> register(CommandDispatcher<CommandSourceStack> dispatcher){
-        return Commands.literal("help")
+public class HelpCommand {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher){
+        dispatcher.register(Commands.literal("eeriehauntings").then(Commands.literal("help")
                 .requires(cs -> cs.hasPermission(0))
-                .executes(CMD);
+                .executes(context -> {
+                    return run(context.getSource());
+                })));
 
 
     }
-    @Override
-    public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        context.getSource().sendSuccess(new TranslatableComponent("help.eeriehauntings.help"), false);
-        context.getSource().sendSuccess(new TranslatableComponent("help.eeriehauntings.forcehaunt"), false);
-        context.getSource().sendSuccess(new TranslatableComponent("help.eeriehauntings.removehaunt"), false);
-        context.getSource().sendSuccess(new TranslatableComponent("help.eeriehauntings.anger"), false);
-        context.getSource().sendSuccess(new TranslatableComponent("help.eeriehauntings.setchance"), false);
-        context.getSource().sendSuccess(new TranslatableComponent("help.eeriehauntings.protect"), false);
+
+    public static int run(CommandSourceStack source) throws CommandSyntaxException {
+        source.sendSuccess(new TranslatableComponent("help.eeriehauntings.help"), false);
+        source.sendSuccess(new TranslatableComponent("help.eeriehauntings.forcehaunt"), false);
+        source.sendSuccess(new TranslatableComponent("help.eeriehauntings.removehaunt"), false);
+        source.sendSuccess(new TranslatableComponent("help.eeriehauntings.anger"), false);
+        source.sendSuccess(new TranslatableComponent("help.eeriehauntings.setchance"), false);
+        source.sendSuccess(new TranslatableComponent("help.eeriehauntings.protect"), false);
         return 0;
     }
 }

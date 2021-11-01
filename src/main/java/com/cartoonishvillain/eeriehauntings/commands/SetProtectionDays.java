@@ -14,11 +14,11 @@ import java.util.Collection;
 
 public class SetProtectionDays {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher){
-        dispatcher.register(Commands.literal("setprotectiondays")
+        dispatcher.register(Commands.literal("eeriehauntings").then(Commands.literal("setprotectiondays")
                 .requires(cs -> {return cs.hasPermission(2);})
                 .then(Commands.argument("target", GameProfileArgument.gameProfile()).then(Commands.argument("days", IntegerArgumentType.integer(0)).executes(context -> {
                     return setHauntChance(context.getSource(), GameProfileArgument.getGameProfiles(context, "target"), IntegerArgumentType.getInteger(context, "days"));
-                })))
+                }))))
 
         );
     }
