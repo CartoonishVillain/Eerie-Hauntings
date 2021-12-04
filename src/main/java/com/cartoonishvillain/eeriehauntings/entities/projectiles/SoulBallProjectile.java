@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 public class SoulBallProjectile extends ThrowableItemProjectile {
     public SoulBallProjectile(EntityType<? extends ThrowableItemProjectile> p_i50157_1_, LivingEntity p_i50157_2_, Level p_i50157_3_) {
@@ -40,9 +40,7 @@ public class SoulBallProjectile extends ThrowableItemProjectile {
         super.onHitEntity(p_213868_1_);
         if (p_213868_1_.getEntity() instanceof Player && !p_213868_1_.getEntity().level.isClientSide){
             Player player = (Player) p_213868_1_.getEntity();
-            player.getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
-                h.addHauntChance(EerieHauntings.serverConfig.SOULBALLCHANCEADD.get().floatValue());
-            });
+            player.getCapability(PlayerCapability.INSTANCE).ifPresent(h-> h.addHauntChance(EerieHauntings.serverConfig.SOULBALLCHANCEADD.get().floatValue()));
         } if(p_213868_1_.getEntity() instanceof LivingEntity && !p_213868_1_.getEntity().level.isClientSide){
             ((LivingEntity) p_213868_1_.getEntity()).addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 30*20, 0));
             p_213868_1_.getEntity().hurt(DamageSource.thrown(this, this.getOwner()), 0);

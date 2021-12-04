@@ -1,7 +1,8 @@
 package com.cartoonishvillain.eeriehauntings;
 
 import com.cartoonishvillain.eeriehauntings.entities.projectiles.SoulBallProjectile;
-import com.cartoonishvillain.eeriehauntings.items.*;
+import com.cartoonishvillain.eeriehauntings.items.Materials;
+import com.cartoonishvillain.eeriehauntings.items.Offering;
 import com.cartoonishvillain.eeriehauntings.items.ghosthuntingitems.*;
 import com.cartoonishvillain.eeriehauntings.items.rewarditems.CalciteChalk;
 import com.cartoonishvillain.eeriehauntings.items.rewarditems.GhostlyInstrument;
@@ -14,9 +15,9 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class Register {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, EerieHauntings.MODID);
