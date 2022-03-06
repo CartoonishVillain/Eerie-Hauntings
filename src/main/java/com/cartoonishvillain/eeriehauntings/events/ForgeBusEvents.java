@@ -542,7 +542,7 @@ public class ForgeBusEvents {
     }
 
     private static boolean playerInSpookyForest(Player player){
-        return player.level.getBiome(player.getOnPos()).getRegistryName().toString().equals("spookybiomes:ghostly_forest");
+        return player.level.getBiome(player.getOnPos()).value().getRegistryName().toString().equals("spookybiomes:ghostly_forest");
     }
 
     private static void ghostlyBiomeModifier(ServerPlayer player){
