@@ -7,7 +7,7 @@ import com.mojang.brigadier.arguments.FloatArgumentType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.GameProfileArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
@@ -32,7 +32,7 @@ public class SetHauntChance {
                 h.setHauntChance(chance);
             });
         }
-        source.sendSuccess(new TranslatableComponent("hauntchance.eeriehauntings.success", chance), false);
+        source.sendSuccess(Component.translatable("hauntchance.eeriehauntings.success", chance), false);
         return 0;
     }
 }

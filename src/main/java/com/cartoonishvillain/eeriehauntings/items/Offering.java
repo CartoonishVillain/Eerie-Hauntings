@@ -5,7 +5,6 @@ import com.cartoonishvillain.eeriehauntings.capabilities.playercapability.Player
 import com.cartoonishvillain.eeriehauntings.events.ForgeBusEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -36,9 +35,9 @@ public class Offering extends Item {
                         ForgeBusEvents.boonExpelGhost((ServerPlayer) p_41433_);
                     } else if(h.getIsHaunted() && h.getAnger()) {
                         p_41433_.getMainHandItem().shrink(1);
-                        p_41433_.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.deny").withStyle(ChatFormatting.RED), false);
+                        p_41433_.displayClientMessage(Component.translatable("boon.eeriehauntings.deny").withStyle(ChatFormatting.RED), false);
                     } else if(!h.getIsHaunted()){
-                        p_41433_.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.wasted").withStyle(ChatFormatting.RED), false);
+                        p_41433_.displayClientMessage(Component.translatable("boon.eeriehauntings.wasted").withStyle(ChatFormatting.RED), false);
                     }
                 });
             }
@@ -50,8 +49,8 @@ public class Offering extends Item {
     public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> p_41423_, TooltipFlag p_41424_) {
         super.appendHoverText(p_41421_, p_41422_, p_41423_, p_41424_);
         if (EerieHauntings.serverConfig.BOON.get())
-        p_41423_.add(new TranslatableComponent("info.eeriehauntings.offering").withStyle(ChatFormatting.GOLD));
+        p_41423_.add(Component.translatable("info.eeriehauntings.offering").withStyle(ChatFormatting.GOLD));
         else
-            p_41423_.add(new TranslatableComponent("info.eeriehauntings.offeringdisabled").withStyle(ChatFormatting.GRAY));
+            p_41423_.add(Component.translatable("info.eeriehauntings.offeringdisabled").withStyle(ChatFormatting.GRAY));
     }
 }

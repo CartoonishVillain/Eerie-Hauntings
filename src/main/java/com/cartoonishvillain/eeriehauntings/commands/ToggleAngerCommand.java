@@ -6,7 +6,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.GameProfileArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
@@ -29,7 +29,7 @@ public class ToggleAngerCommand {
                 h.setAnger(!h.getAnger());
             });
         }
-        source.sendSuccess(new TranslatableComponent("anger.eeriehauntings.toggled"), false);
+        source.sendSuccess(Component.translatable("anger.eeriehauntings.toggled"), false);
         return 0;
     }
 }

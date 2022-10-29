@@ -1,13 +1,10 @@
 package com.cartoonishvillain.eeriehauntings.commands;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 
 public class HelpCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher){
@@ -21,12 +18,12 @@ public class HelpCommand {
     }
 
     public static int run(CommandSourceStack source) throws CommandSyntaxException {
-        source.sendSuccess(new TranslatableComponent("help.eeriehauntings.help"), false);
-        source.sendSuccess(new TranslatableComponent("help.eeriehauntings.forcehaunt"), false);
-        source.sendSuccess(new TranslatableComponent("help.eeriehauntings.removehaunt"), false);
-        source.sendSuccess(new TranslatableComponent("help.eeriehauntings.anger"), false);
-        source.sendSuccess(new TranslatableComponent("help.eeriehauntings.setchance"), false);
-        source.sendSuccess(new TranslatableComponent("help.eeriehauntings.protect"), false);
+        source.sendSuccess(Component.translatable("help.eeriehauntings.help"), false);
+        source.sendSuccess(Component.translatable("help.eeriehauntings.forcehaunt"), false);
+        source.sendSuccess(Component.translatable("help.eeriehauntings.removehaunt"), false);
+        source.sendSuccess(Component.translatable("help.eeriehauntings.anger"), false);
+        source.sendSuccess(Component.translatable("help.eeriehauntings.setchance"), false);
+        source.sendSuccess(Component.translatable("help.eeriehauntings.protect"), false);
         return 0;
     }
 }

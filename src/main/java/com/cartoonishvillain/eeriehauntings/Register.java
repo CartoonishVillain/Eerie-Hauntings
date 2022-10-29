@@ -20,7 +20,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class Register {
-    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, EerieHauntings.MODID);
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, EerieHauntings.MODID);
     public static final DeferredRegister<SoundEvent> SOUND_EVENT = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, EerieHauntings.MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, EerieHauntings.MODID);
 
@@ -47,8 +47,8 @@ public class Register {
 
     public static final RegistryObject<Item> CALCITECHALK = ITEMS.register("calcite_chalk", () -> new CalciteChalk(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
     public static final RegistryObject<Item> UNEARTHLYOFFERING = ITEMS.register("unearthly_offering", () -> new Offering(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
-    public static final RegistryObject<Item> GHOSTLYINSTRUMENT = ITEMS.register("ghostly_instrument", () -> new GhostlyInstrument(new Item.Properties().durability(128).tab(CreativeModeTab.TAB_MISC)));
-    public static final RegistryObject<Item> AMPLIFIEDGHOSTLYINSTRUMENT = ITEMS.register("amplified_ghostly_instrument", () -> new GhostlyInstrument(new Item.Properties().durability(128).tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> GHOSTLYINSTRUMENT = ITEMS.register("ghostly_instrument", () -> new GhostlyInstrument(new Item.Properties().durability(128).tab(CreativeModeTab.TAB_MISC), GhostlyInstrument.TYPE.STANDARD));
+    public static final RegistryObject<Item> AMPLIFIEDGHOSTLYINSTRUMENT = ITEMS.register("amplified_ghostly_instrument", () -> new GhostlyInstrument(new Item.Properties().durability(128).tab(CreativeModeTab.TAB_MISC), GhostlyInstrument.TYPE.AMPLIFIED));
 
 
 

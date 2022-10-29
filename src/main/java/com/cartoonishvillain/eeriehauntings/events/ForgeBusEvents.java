@@ -21,9 +21,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
@@ -33,7 +33,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
-import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.AbstractGolem;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -47,7 +47,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -63,6 +63,8 @@ import java.util.concurrent.atomic.AtomicReference;
 @Mod.EventBusSubscriber(modid = EerieHauntings.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 
 public class ForgeBusEvents {
+
+    private static ServerLevel level = null;
 
 
     @SubscribeEvent
@@ -93,22 +95,31 @@ public class ForgeBusEvents {
 
 
     @SubscribeEvent
-    public static void dayNightCheck(TickEvent.WorldTickEvent event) {
-        if (!event.world.isClientSide()) {
-            event.world.getCapability(WorldCapability.INSTANCE).ifPresent(h -> {
-                if(h.isNight() && event.world.isDay()) {
-                    h.setisNight(false);
-                    //Day Time.
-                    ResetGhostAngers(event.world.getServer());
-
+    public static void dayNightCheck(TickEvent.ServerTickEvent event) {
+        if(event.phase.equals(TickEvent.Phase.END)) {
+            if(level == null) {
+                for (ServerLevel levelCheck : event.getServer().getAllLevels()) {
+                    if (levelCheck.dimension().toString().contains("minecraft:overworld")) {
+                        level = levelCheck;
+                    }
                 }
-                else if(!h.isNight() && !event.world.isDay()){
-                    h.setisNight(true);
-                    //Night Time
-                    HauntCheck(event.world.getServer());
-                }
-            });
+            }
 
+            if (!level.isClientSide()) {
+                level.getCapability(WorldCapability.INSTANCE).ifPresent(h -> {
+                    if (h.isNight() && level.isDay()) {
+                        h.setisNight(false);
+                        //Day Time.
+                        ResetGhostAngers(level.getServer());
+
+                    } else if (!h.isNight() && !level.isDay()) {
+                        h.setisNight(true);
+                        //Night Time
+                        HauntCheck(level.getServer());
+                    }
+                });
+
+            }
         }
     }
 
@@ -176,11 +187,11 @@ public class ForgeBusEvents {
                         if (event.player.getMainHandItem().getItem().equals(Register.OLDRADIO.get()) && h.getGhostType() != 1 && h.getGhostType() != 0) {
                             event.player.getCooldowns().addCooldown(Register.OLDRADIO.get(), 100);
                             event.player.level.playSound(null, event.player.getOnPos(), Register.RADIOSOUND.get(), SoundSource.MASTER, 1, 1);
-                            event.player.displayClientMessage(new TranslatableComponent("item.eeriehauntings.radio").withStyle(ChatFormatting.GOLD), true);
+                            event.player.displayClientMessage(Component.translatable("item.eeriehauntings.radio").withStyle(ChatFormatting.GOLD), true);
                         } else if (event.player.getMainHandItem().getItem().equals(Register.EMFCOUNTER.get()) && h.getGhostType() != 2 && h.getGhostType() != 0) {
                             event.player.getCooldowns().addCooldown(Register.EMFCOUNTER.get(), 100);
                             event.player.level.playSound(null, event.player.getOnPos(), Register.EMFCOUNTERSOUNDS.get(), SoundSource.MASTER, 1, 1);
-                            event.player.displayClientMessage(new TranslatableComponent("item.eeriehauntings.emf").withStyle(ChatFormatting.GOLD), true);
+                            event.player.displayClientMessage(Component.translatable("item.eeriehauntings.emf").withStyle(ChatFormatting.GOLD), true);
                         }
 
                     }
@@ -193,7 +204,7 @@ public class ForgeBusEvents {
     @SubscribeEvent
     public static void entityKilled(LivingDeathEvent event){
         //The death of entities may cause a user to be haunted... Some entities are stronger willed than others.
-        LivingEntity victim = event.getEntityLiving();
+        LivingEntity victim = event.getEntity();
         if(!victim.level.isClientSide() && event.getSource().getDirectEntity() instanceof Player) {
             Player aggressor = (Player) event.getSource().getDirectEntity();
             float hauntIncrease;
@@ -210,8 +221,8 @@ public class ForgeBusEvents {
     }
 
     @SubscribeEvent
-    public static void playerJoinEvent(EntityJoinWorldEvent event){
-        if(!event.getWorld().isClientSide() && event.getEntity() instanceof Player && ValidPlayer((Player) event.getEntity())){
+    public static void playerJoinEvent(EntityJoinLevelEvent event){
+        if(!event.getLevel().isClientSide() && event.getEntity() instanceof Player && ValidPlayer((Player) event.getEntity())){
             event.getEntity().getCapability(PlayerCapability.INSTANCE).ifPresent(h->{
                 if(h.getVisualEffectTime() > 0){
                     ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(event.getEntity().getId(), h.getVisualEffectTime(), h.getEffectID()), (Player) event.getEntity());
@@ -223,8 +234,8 @@ public class ForgeBusEvents {
     @SubscribeEvent
     public static void ItemToolTips(ItemTooltipEvent event){
         if(event.getItemStack().getItem().equals(Register.UNEARTHLYSHARD.get())){
-            event.getToolTip().add(new TranslatableComponent("info.eeriehauntings.shard").withStyle(ChatFormatting.GOLD));
-            event.getToolTip().add(new TranslatableComponent("info.eeriehauntings.shardgain").withStyle(ChatFormatting.RED));
+            event.getToolTip().add(Component.translatable("info.eeriehauntings.shard").withStyle(ChatFormatting.GOLD));
+            event.getToolTip().add(Component.translatable("info.eeriehauntings.shardgain").withStyle(ChatFormatting.RED));
         }
     }
 
@@ -234,7 +245,7 @@ public class ForgeBusEvents {
         if(!event.isWasDeath()){
             //runs whenever player gets out of end
             Player originalPlayer = event.getOriginal();
-            Player newPlayer = event.getPlayer();
+            Player newPlayer = event.getEntity();
 
              AtomicBoolean haunted = new AtomicBoolean(false);
              AtomicBoolean anger = new AtomicBoolean(false);
@@ -328,15 +339,15 @@ public class ForgeBusEvents {
             switch (random) {
                 case 0 -> {
                     player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 350, 0));
-//                player.displayClientMessage(new TranslatableComponent("ghost.moderateslow.alert"), false);
+//                player.displayClientMessage(Component.translatable()("ghost.moderateslow.alert"), false);
                 }
                 case 1 -> {
                     player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 350, 0));
-//                player.displayClientMessage(new TranslatableComponent("ghost.moderateblind.alert"), false);
+//                player.displayClientMessage(Component.translatable()("ghost.moderateblind.alert"), false);
                 }
                 case 2 -> {
                     player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 350, 0));
-//                player.displayClientMessage(new TranslatableComponent("ghost.moderateweakness.alert"), false);
+//                player.displayClientMessage(Component.translatable()("ghost.moderateweakness.alert"), false);
                 }
                 case 3 -> {
                     if (!leverWork(player)) {
@@ -370,7 +381,7 @@ public class ForgeBusEvents {
                         h.setVisualEffectTime(200);
                         ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(player.getId(), 200, 1), player);
                     });
-//                player.displayClientMessage(new TranslatableComponent("ghost.stronglevitate.alert"), false);
+//                player.displayClientMessage(Component.translatable()("ghost.stronglevitate.alert"), false);
                 }
                 case 1 -> {
                     player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 350, 0));
@@ -379,7 +390,7 @@ public class ForgeBusEvents {
                         h.setVisualEffectTime(350);
                         ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(player.getId(), 350, 3), player);
                     });
-//                player.displayClientMessage(new TranslatableComponent("ghost.strongconfusion.alert"), false);
+//                player.displayClientMessage(Component.translatable()("ghost.strongconfusion.alert"), false);
                 }
                 case 2 -> {
                     player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 200, 0));
@@ -388,7 +399,7 @@ public class ForgeBusEvents {
                         h.setVisualEffectTime(200);
                         ShaderUpdateMessenger.sendTo(new ShaderUpdatePacket(player.getId(), 200, 2), player);
                     });
-//                player.displayClientMessage(new TranslatableComponent("ghost.stronghunger.alert"), false);
+//                player.displayClientMessage(Component.translatable()("ghost.stronghunger.alert"), false);
                 }
                 case 3 -> {
                     if(!doorWork(player)){
@@ -436,30 +447,30 @@ public class ForgeBusEvents {
                 switch (rand) {
                     case 0 -> {
                         player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, Integer.MAX_VALUE,  EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
-                        player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.speed").withStyle(ChatFormatting.AQUA), false);
+                        player.displayClientMessage(Component.translatable("boon.eeriehauntings.speed").withStyle(ChatFormatting.AQUA), false);
                     }
                     case 1 -> {
                         player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, Integer.MAX_VALUE, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
-                        player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.haste").withStyle(ChatFormatting.YELLOW), false);
+                        player.displayClientMessage(Component.translatable("boon.eeriehauntings.haste").withStyle(ChatFormatting.YELLOW), false);
                     }
                     case 2 -> {
                         player.addEffect(new MobEffectInstance(MobEffects.JUMP, Integer.MAX_VALUE, 1 + EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
-                        player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.jump").withStyle(ChatFormatting.GREEN), false);
+                        player.displayClientMessage(Component.translatable("boon.eeriehauntings.jump").withStyle(ChatFormatting.GREEN), false);
                     }
                     case 3 -> {
                         player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, Integer.MAX_VALUE, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
-                        player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.resistance").withStyle(ChatFormatting.RED), false);
+                        player.displayClientMessage(Component.translatable("boon.eeriehauntings.resistance").withStyle(ChatFormatting.RED), false);
                     }
                     case 4 -> {
                         player.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, Integer.MAX_VALUE, 1 + EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
-                        player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.life").withStyle(ChatFormatting.LIGHT_PURPLE), false);
+                        player.displayClientMessage(Component.translatable("boon.eeriehauntings.life").withStyle(ChatFormatting.LIGHT_PURPLE), false);
                     }
                     case 5 -> {
                         player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, Integer.MAX_VALUE, EerieHauntings.serverConfig.BOONSTRENGTH.get(), false, false));
-                        player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.strength").withStyle(ChatFormatting.DARK_RED), false);
+                        player.displayClientMessage(Component.translatable("boon.eeriehauntings.strength").withStyle(ChatFormatting.DARK_RED), false);
                     }
                 }
-            } else player.displayClientMessage(new TranslatableComponent("boon.eeriehauntings.disabled").withStyle(ChatFormatting.DARK_RED), false);
+            } else player.displayClientMessage(Component.translatable("boon.eeriehauntings.disabled").withStyle(ChatFormatting.DARK_RED), false);
         });
     }
 
@@ -533,16 +544,12 @@ public class ForgeBusEvents {
         });
     }
 
-    private static void broadcast(MinecraftServer server, Component translationTextComponent){
-        server.getPlayerList().broadcastMessage(translationTextComponent, ChatType.CHAT, UUID.randomUUID());
-    }
-
     private static boolean ValidPlayer(Player player){
         return !player.isCreative() && !player.isSpectator();
     }
 
     private static boolean playerInSpookyForest(Player player){
-        return player.level.getBiome(player.getOnPos()).value().getRegistryName().toString().equals("spookybiomes:ghostly_forest");
+        return player.level.getBiome(player.getOnPos()).value().toString().equals("spookybiomes:ghostly_forest");
     }
 
     private static void ghostlyBiomeModifier(ServerPlayer player){

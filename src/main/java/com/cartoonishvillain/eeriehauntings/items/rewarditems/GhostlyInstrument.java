@@ -4,13 +4,10 @@ import com.cartoonishvillain.eeriehauntings.EerieHauntings;
 import com.cartoonishvillain.eeriehauntings.Register;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -25,17 +22,21 @@ import java.util.List;
 
 
 public class GhostlyInstrument extends Item {
-    public GhostlyInstrument(Properties p_41383_) {
+    public enum TYPE {
+        STANDARD,
+        AMPLIFIED
+    }
+    private TYPE type;
+    public GhostlyInstrument(Properties p_41383_, TYPE type) {
         super(p_41383_);
+        this.type = type;
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level p_41432_, Player p_41433_, InteractionHand p_41434_) {
         if(!p_41432_.isClientSide()) {
-            String item = p_41433_.getItemInHand(p_41434_).getItem().getRegistryName().getPath();
-            switch (item) {
-                case "amplified_ghostly_instrument": {
-
+            switch (type) {
+                case AMPLIFIED: {
                     SoundEvent soundEvent = null;
                     short x = (short) p_41433_.getRandom().nextInt(2);
                     soundEvent = x == 0 ?  Register.MEDIUMSTRENGTHSOUNDS.get() :  Register.STRONGSTRENGTHSOUNDS.get();
@@ -48,7 +49,7 @@ public class GhostlyInstrument extends Item {
                        p_41300_.broadcastBreakEvent(p_41434_);
                    } ); p_41433_.getCooldowns().addCooldown(this, 300);}
                    else p_41433_.getCooldowns().addCooldown(this, 200);
-                    break;
+                   break;
                 }
                 default: {
                     p_41433_.getCooldowns().addCooldown(this, 200);
@@ -81,21 +82,20 @@ public class GhostlyInstrument extends Item {
 
     @Override
     public boolean isFoil(ItemStack p_41453_) {
-        return p_41453_.getItem().getRegistryName().getPath().equals("amplified_ghostly_instrument");
+        return type == TYPE.AMPLIFIED;
     }
 
     @Override
     public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> p_41423_, TooltipFlag p_41424_) {
         super.appendHoverText(p_41421_, p_41422_, p_41423_, p_41424_);
-        String item = p_41421_.getItem().getRegistryName().getPath();
-        switch (item){
-            case "amplified_ghostly_instrument":{
-                p_41423_.add(new TranslatableComponent("amplifiedinstrument.eeriehauntings.infosound").withStyle(ChatFormatting.BLUE));
-                p_41423_.add(new TranslatableComponent("amplifiedinstrument.eeriehauntings.infocrouch").withStyle(ChatFormatting.RED));
+        switch (type){
+            case AMPLIFIED:{
+                p_41423_.add(Component.translatable("amplifiedinstrument.eeriehauntings.infosound").withStyle(ChatFormatting.BLUE));
+                p_41423_.add(Component.translatable("amplifiedinstrument.eeriehauntings.infocrouch").withStyle(ChatFormatting.RED));
                 break;
             }
             default:{
-                p_41423_.add(new TranslatableComponent("instrument.eeriehauntings.infosound").withStyle(ChatFormatting.BLUE));
+                p_41423_.add(Component.translatable("instrument.eeriehauntings.infosound").withStyle(ChatFormatting.BLUE));
                 break;
             }
         }
