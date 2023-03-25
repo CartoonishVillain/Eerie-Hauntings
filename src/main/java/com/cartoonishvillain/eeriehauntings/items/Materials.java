@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 public enum Materials implements Tier {
 
-    UNEARTHLY(0, 256, 2.5f, 0, 30, () ->{return Ingredient.of(Register.UNEARTHLYGEM.get());});
+    UNEARTHLY(0, 256, 2.5f, 3, 30, () ->{return Ingredient.of(Register.UNEARTHLYGEM.get());});
 
     private final int harvestLevel;
     private final int maxUses;

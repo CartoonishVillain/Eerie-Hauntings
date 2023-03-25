@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-   "layer0": "eeriehauntings:items/purified_water"
+   "layer0": "eeriehauntings:item/purified_water"
  }
 }

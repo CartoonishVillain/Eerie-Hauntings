@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-   "layer0": "eeriehauntings:items/old_radio"
+   "layer0": "eeriehauntings:item/old_radio"
  }
 }

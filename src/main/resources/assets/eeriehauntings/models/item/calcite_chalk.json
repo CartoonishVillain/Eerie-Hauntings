@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-   "layer0": "eeriehauntings:items/calcite_chalk"
+   "layer0": "eeriehauntings:item/calcite_chalk"
  }
 }

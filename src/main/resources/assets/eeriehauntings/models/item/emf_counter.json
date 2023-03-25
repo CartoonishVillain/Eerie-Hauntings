@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-   "layer0": "eeriehauntings:items/emf_counter"
+   "layer0": "eeriehauntings:item/emf_counter"
  }
 }

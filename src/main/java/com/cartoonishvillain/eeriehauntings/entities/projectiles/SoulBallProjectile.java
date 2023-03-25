@@ -4,7 +4,8 @@ import com.cartoonishvillain.eeriehauntings.EerieHauntings;
 import com.cartoonishvillain.eeriehauntings.Register;
 import com.cartoonishvillain.eeriehauntings.capabilities.playercapability.PlayerCapability;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -43,7 +44,7 @@ public class SoulBallProjectile extends ThrowableItemProjectile {
             player.getCapability(PlayerCapability.INSTANCE).ifPresent(h-> h.addHauntChance(EerieHauntings.serverConfig.SOULBALLCHANCEADD.get().floatValue()));
         } if(p_213868_1_.getEntity() instanceof LivingEntity && !p_213868_1_.getEntity().level.isClientSide){
             ((LivingEntity) p_213868_1_.getEntity()).addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 30*20, 0));
-            p_213868_1_.getEntity().hurt(DamageSource.thrown(this, this.getOwner()), 0);
+            p_213868_1_.getEntity().hurt(this.damageSources().thrown(this, this.getOwner()), 0);
         }
     }
 
@@ -54,7 +55,7 @@ public class SoulBallProjectile extends ThrowableItemProjectile {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

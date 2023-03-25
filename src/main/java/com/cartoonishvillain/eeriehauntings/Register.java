@@ -30,31 +30,31 @@ public class Register {
         ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
-    public static final RegistryObject<SoundEvent> MEDIUMSTRENGTHSOUNDS = SOUND_EVENT.register("medium_sounds", () -> new SoundEvent(new ResourceLocation(EerieHauntings.MODID, "medium_sounds")));
-    public static final RegistryObject<SoundEvent> STRONGSTRENGTHSOUNDS = SOUND_EVENT.register("strong_sounds", () -> new SoundEvent(new ResourceLocation(EerieHauntings.MODID, "strong_sounds")));
-    public static final RegistryObject<SoundEvent> EMFCOUNTERSOUNDS = SOUND_EVENT.register("emfcounter", () -> new SoundEvent(new ResourceLocation(EerieHauntings.MODID, "emfcounter")));
-    public static final RegistryObject<SoundEvent> RADIOSOUND = SOUND_EVENT.register("radio", () -> new SoundEvent(new ResourceLocation(EerieHauntings.MODID, "radio")));
+    public static final RegistryObject<SoundEvent> MEDIUMSTRENGTHSOUNDS = SOUND_EVENT.register("medium_sounds", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(EerieHauntings.MODID, "medium_sounds")));
+    public static final RegistryObject<SoundEvent> STRONGSTRENGTHSOUNDS = SOUND_EVENT.register("strong_sounds", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(EerieHauntings.MODID, "strong_sounds")));
+    public static final RegistryObject<SoundEvent> EMFCOUNTERSOUNDS = SOUND_EVENT.register("emfcounter", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(EerieHauntings.MODID, "emfcounter")));
+    public static final RegistryObject<SoundEvent> RADIOSOUND = SOUND_EVENT.register("radio", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(EerieHauntings.MODID, "radio")));
 
 
-    public static final RegistryObject<Item> EMFCOUNTER = ITEMS.register("emf_counter", () -> new EMFCounter(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1)));
-    public static final RegistryObject<Item> OLDRADIO = ITEMS.register("old_radio", () -> new Radio(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1)));
-    public static final RegistryObject<Item> UNEARTHLYSHARD = ITEMS.register("unearthly_shard", () -> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS)));
-    public static final RegistryObject<Item> UNEARTHLYGEM = ITEMS.register("unearthly_gem", () -> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS)));
-    public static final RegistryObject<Item> INCENSESTICK = ITEMS.register("incense_stick", () -> new IncenseStick(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
-    public static final RegistryObject<Item> PURIFIEDWATER = ITEMS.register("purified_water", () -> new PurifiedWater(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
-    public static final RegistryObject<Item> REDSTONEDREAMCATCHER = ITEMS.register("redstone_dream_catcher", () -> new RedstoneDreamCatcher(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
+    public static final RegistryObject<Item> EMFCOUNTER = ITEMS.register("emf_counter", () -> new EMFCounter(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> OLDRADIO = ITEMS.register("old_radio", () -> new Radio(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> UNEARTHLYSHARD = ITEMS.register("unearthly_shard", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> UNEARTHLYGEM = ITEMS.register("unearthly_gem", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> INCENSESTICK = ITEMS.register("incense_stick", () -> new IncenseStick(new Item.Properties()));
+    public static final RegistryObject<Item> PURIFIEDWATER = ITEMS.register("purified_water", () -> new PurifiedWater(new Item.Properties()));
+    public static final RegistryObject<Item> REDSTONEDREAMCATCHER = ITEMS.register("redstone_dream_catcher", () -> new RedstoneDreamCatcher(new Item.Properties()));
 
 
-    public static final RegistryObject<Item> CALCITECHALK = ITEMS.register("calcite_chalk", () -> new CalciteChalk(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
-    public static final RegistryObject<Item> UNEARTHLYOFFERING = ITEMS.register("unearthly_offering", () -> new Offering(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
-    public static final RegistryObject<Item> GHOSTLYINSTRUMENT = ITEMS.register("ghostly_instrument", () -> new GhostlyInstrument(new Item.Properties().durability(128).tab(CreativeModeTab.TAB_MISC), GhostlyInstrument.TYPE.STANDARD));
-    public static final RegistryObject<Item> AMPLIFIEDGHOSTLYINSTRUMENT = ITEMS.register("amplified_ghostly_instrument", () -> new GhostlyInstrument(new Item.Properties().durability(128).tab(CreativeModeTab.TAB_MISC), GhostlyInstrument.TYPE.AMPLIFIED));
+    public static final RegistryObject<Item> CALCITECHALK = ITEMS.register("calcite_chalk", () -> new CalciteChalk(new Item.Properties()));
+    public static final RegistryObject<Item> UNEARTHLYOFFERING = ITEMS.register("unearthly_offering", () -> new Offering(new Item.Properties()));
+    public static final RegistryObject<Item> GHOSTLYINSTRUMENT = ITEMS.register("ghostly_instrument", () -> new GhostlyInstrument(new Item.Properties().durability(128), GhostlyInstrument.TYPE.STANDARD));
+    public static final RegistryObject<Item> AMPLIFIEDGHOSTLYINSTRUMENT = ITEMS.register("amplified_ghostly_instrument", () -> new GhostlyInstrument(new Item.Properties().durability(128), GhostlyInstrument.TYPE.AMPLIFIED));
 
 
 
-    public static final RegistryObject<Item> UNEARTHLYDAGGER = ITEMS.register("unearthly_dagger", () -> new UnearthlyDagger(Materials.UNEARTHLY, 3, -1.5f, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
+    public static final RegistryObject<Item> UNEARTHLYDAGGER = ITEMS.register("unearthly_dagger", () -> new UnearthlyDagger(Materials.UNEARTHLY, 3, -1.5f, new Item.Properties()));
 
-    public static final RegistryObject<Item> SOULBALL = ITEMS.register("soulball", () -> new SoulBall(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> SOULBALL = ITEMS.register("soulball", () -> new SoulBall(new Item.Properties()));
 
     public static final RegistryObject<EntityType<SoulBallProjectile>> SOULBALLPROJECTILE = ENTITY_TYPES.register("soulballprojectile", () -> EntityType.Builder.<SoulBallProjectile>of(SoulBallProjectile::new, MobCategory.MISC).sized(0.25f, 0.25f).updateInterval(10).build(new ResourceLocation(EerieHauntings.MODID, "soulballprojectile").toString()));
 
